@@ -58,26 +58,29 @@ export default function Home() {
           minHeight: "70px",
         }}
       >
-        {/* ── Brand left: MANDARINA DUCK ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-          <span
+        {/* ── Brand left: MANDARINA DUCK + Luggage and Lifestyle SVGs ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+          {/* MANDARINA DUCK logo — extracted Canva PNG, inverted for white bg */}
+          <Image
+            src="/md-logo-extracted.png"
+            alt="Mandarina Duck"
+            width={180}
+            height={62}
             style={{
-              fontFamily: "var(--font-playfair), Georgia, serif",
-              fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
-              fontWeight: 700,
-              letterSpacing: "0.2em",
-              color: "#7a7030",
-              textTransform: "uppercase",
+              width: "clamp(100px, 12vw, 165px)",
+              height: "auto",
+              filter: "invert(1) contrast(2.2) brightness(0.75)",
+              display: "block",
             }}
-          >
-            MANDARINA DUCK
-          </span>
+          />
+          {/* Luggage and Lifestyle - styled text */}
           <span
             style={{
               fontFamily: "var(--font-mono), monospace",
-              fontSize: "clamp(0.48rem, 0.6vw, 0.6rem)",
-              letterSpacing: "0.1em",
+              fontSize: "clamp(0.42rem, 0.55vw, 0.58rem)",
+              letterSpacing: "0.12em",
               color: "#1190af",
+              marginTop: "1px",
             }}
           >
             Luggage and Lifestyle
@@ -237,6 +240,7 @@ export default function Home() {
             src="/hero-woman.jpg"
             alt="Mandarina Duck – TopTik Hot Collection"
             fill
+            sizes="43vw"
             style={{
               objectFit: "cover",
               objectPosition: "center 55%",
