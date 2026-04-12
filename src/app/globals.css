@@ -35,7 +35,6 @@ body {
 
 body {
   font-family: var(--font-heebo), "Heebo", sans-serif;
-  zoom: 0.82;
   background: linear-gradient(
     180deg,
     #a89a28 0%,

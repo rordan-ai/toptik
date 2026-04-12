@@ -1,10 +1,10 @@
 import Image from "next/image";
 
-function ShoppingBagIcon() {
+function BagIcon() {
   return (
     <svg
-      width="32"
-      height="32"
+      width="30"
+      height="30"
       viewBox="0 0 36 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -15,13 +15,13 @@ function ShoppingBagIcon() {
         width="26"
         height="18"
         rx="2.5"
-        stroke="#1190af"
+        stroke="white"
         strokeWidth="2"
         fill="none"
       />
       <path
         d="M12 13V10.5a6 6 0 0112 0V13"
-        stroke="#1190af"
+        stroke="white"
         strokeWidth="2"
         fill="none"
         strokeLinecap="round"
@@ -43,56 +43,49 @@ export default function Home() {
         overflow: "hidden",
       }}
     >
-      {/* ─── HEADER CARD ─── */}
+      {/* ─── HEADER – על גבי הגרדיאנט הזהב ─── */}
       <header
         style={{
-          margin: "10px 10px 0",
-          borderRadius: "16px",
-          background: "rgba(255,255,255,0.96)",
-          boxShadow: "0 2px 14px rgba(0,0,0,0.09)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "8px 24px",
+          padding:
+            "clamp(10px, 1.8vh, 22px) clamp(20px, 3vw, 48px)",
           flexShrink: 0,
-          minHeight: "70px",
         }}
       >
-        {/* ── Brand left: MANDARINA DUCK + Luggage and Lifestyle SVGs ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-          {/* MANDARINA DUCK logo — extracted Canva PNG, inverted for white bg */}
-          <Image
-            src="/md-logo-extracted.png"
-            alt="Mandarina Duck"
-            width={180}
-            height={62}
+        {/* ── Brand left ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+          <span
             style={{
-              width: "clamp(100px, 12vw, 165px)",
-              height: "auto",
-              filter: "invert(1) contrast(2.2) brightness(0.75)",
-              display: "block",
+              fontFamily: "var(--font-playfair), Georgia, serif",
+              fontSize: "clamp(0.75rem, 1vw, 1.05rem)",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              color: "#6b6530",
+              textTransform: "uppercase",
             }}
-          />
-          {/* Luggage and Lifestyle - styled text */}
+          >
+            MANDARINA DUCK
+          </span>
           <span
             style={{
               fontFamily: "var(--font-mono), monospace",
-              fontSize: "clamp(0.42rem, 0.55vw, 0.58rem)",
+              fontSize: "clamp(0.44rem, 0.58vw, 0.62rem)",
               letterSpacing: "0.12em",
               color: "#1190af",
-              marginTop: "1px",
             }}
           >
             Luggage and Lifestyle
           </span>
         </div>
 
-        {/* ── Nav + TOPTIK right ── */}
+        {/* ── Nav: ריבועים תכלת + TOPTIK ── */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "clamp(12px, 2vw, 30px)",
+            gap: "clamp(10px, 1.5vw, 22px)",
           }}
         >
           {navItems.map((label) => (
@@ -103,17 +96,25 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: "2px",
+                justifyContent: "center",
+                gap: "4px",
+                background: "#1190af",
+                borderRadius: "8px",
+                padding:
+                  "clamp(6px, 0.8vh, 10px) clamp(10px, 1.2vw, 18px)",
+                minWidth: "clamp(58px, 6.5vw, 82px)",
                 textDecoration: "none",
+                cursor: "pointer",
               }}
             >
-              <ShoppingBagIcon />
+              <BagIcon />
               <span
                 style={{
                   fontFamily: "var(--font-heebo), sans-serif",
-                  fontSize: "clamp(0.5rem, 0.65vw, 0.65rem)",
-                  color: "#444",
-                  fontWeight: 500,
+                  fontSize: "clamp(0.55rem, 0.7vw, 0.72rem)",
+                  fontWeight: 600,
+                  color: "white",
+                  direction: "rtl",
                 }}
               >
                 {label}
@@ -121,64 +122,45 @@ export default function Home() {
             </a>
           ))}
 
-          {/* ── TOPTIK Logo Text ── */}
-          <div
+          {/* TOPTIK */}
+          <span
             style={{
-              marginLeft: "clamp(6px, 1vw, 16px)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              lineHeight: 1.1,
+              marginLeft: "clamp(8px, 1.2vw, 20px)",
+              fontFamily: "var(--font-playfair), Georgia, serif",
+              fontSize: "clamp(1.1rem, 1.8vw, 1.8rem)",
+              fontWeight: 700,
+              letterSpacing: "0.22em",
+              color: "#514d4d",
+              textTransform: "uppercase",
             }}
           >
-            <span
-              style={{
-                fontFamily: "var(--font-playfair), Georgia, serif",
-                fontSize: "clamp(1rem, 1.6vw, 1.6rem)",
-                fontWeight: 700,
-                letterSpacing: "0.25em",
-                color: "#1190af",
-                textTransform: "uppercase",
-              }}
-            >
-              TOPTIK
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--font-mono), monospace",
-                fontSize: "clamp(0.4rem, 0.5vw, 0.5rem)",
-                letterSpacing: "0.08em",
-                color: "#0880a3",
-              }}
-            >
-              Luggage and Lifestyle
-            </span>
-          </div>
+            TOPTIK
+          </span>
         </div>
       </header>
 
-      {/* ─── HERO SECTION ─── */}
+      {/* ─── HERO ─── */}
       <main
         style={{
           flex: 1,
           display: "flex",
           alignItems: "stretch",
-          padding: "clamp(10px, 2vh, 24px) clamp(16px, 2vw, 36px) clamp(10px, 2vh, 24px)",
+          padding:
+            "clamp(6px, 1.5vh, 18px) clamp(16px, 2.5vw, 40px) clamp(10px, 2vh, 24px)",
           gap: "clamp(10px, 1.5vw, 24px)",
           overflow: "hidden",
         }}
       >
-        {/* ── Left: Text ── */}
+        {/* Left: Text */}
         <div
           style={{
-            flex: "0 0 57%",
+            flex: "0 0 55%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-start",
-            paddingTop: "clamp(6px, 4vh, 48px)",
+            paddingTop: "clamp(6px, 3vh, 36px)",
           }}
         >
-          {/* Main heading — sized to fit 2 lines max */}
           <h1
             style={{
               fontFamily: "var(--font-playfair), Georgia, serif",
@@ -195,7 +177,6 @@ export default function Home() {
             Hot Colection
           </h1>
 
-          {/* Hebrew quote */}
           <blockquote
             dir="rtl"
             style={{
@@ -210,7 +191,6 @@ export default function Home() {
             &ldquo;כי כל מסע מגיע לתיק הנכון&rdquo;
           </blockquote>
 
-          {/* Hebrew subtext */}
           <p
             dir="rtl"
             style={{
@@ -226,12 +206,12 @@ export default function Home() {
           </p>
         </div>
 
-        {/* ── Right: Hero Image ── */}
+        {/* Right: Hero Image */}
         <div
           style={{
-            flex: "0 0 43%",
+            flex: "1",
             position: "relative",
-            height: "100%",
+            minHeight: 0,
             borderRadius: "3px",
             overflow: "hidden",
           }}
