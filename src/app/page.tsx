@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="page">
       <div className="stage" data-variant="v1">
-        {/* Hero (without baked-in bottom bar) */}
+        {/* Hero — desktop landscape (1366x666) */}
         <Image
           src="/hero-clean.png"
           alt="TopTik Hero"
@@ -20,7 +20,18 @@ export default function Home() {
           quality={100}
           unoptimized
           sizes="100vw"
-          className="hero-img"
+          className="hero-img hero-desktop"
+        />
+
+        {/* Hero — mobile portrait (different artwork, only on mobile) */}
+        <Image
+          src="/hero-mobile.png"
+          alt="TopTik Hero Mobile"
+          fill
+          quality={100}
+          unoptimized
+          sizes="100vw"
+          className="hero-img hero-mobile"
         />
 
         {/* Top scrim */}

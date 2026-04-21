@@ -42,6 +42,16 @@ body {
 /* Hide mobile layer at desktop sizes */
 .m-layer { display: none; }
 
+/* ─────── Hero image swap by viewport ───────
+   Default: desktop visible, mobile hidden.
+   Below 768px: swap. */
+.hero-desktop { display: block; }
+.hero-mobile  { display: none; }
+@media (max-width: 767px) {
+  .hero-desktop { display: none !important; }
+  .hero-mobile  { display: block !important; object-position: center center !important; }
+}
+
 /* ─────── TABLET TIGHTEN (768-1023px) ───────
    Tablets keep desktop layout but with touch-friendly sizing.
    Affects ONLY desktop layout on tablet — mobile layer untouched. */
@@ -59,7 +69,7 @@ body {
   .stage > .navbar,
   .stage > .bottom-bar { display: none !important; }
   .stage { aspect-ratio: auto; min-height: 100dvh; }
-  .stage > img { object-position: 70% center !important; }
+  /* Old desktop-image position override removed - mobile uses dedicated hero-mobile.png */
 
   /* ─── Mobile top bar (with notch / Dynamic Island safe area) ─── */
   .m-topbar {
