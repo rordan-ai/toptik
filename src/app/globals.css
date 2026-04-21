@@ -200,22 +200,24 @@ body {
     transition: background 0.15s ease;
   }
   .m-menu nav a:active { background: rgba(31, 39, 49, 0.06); }
-  .m-menu-cta {
-    margin-top: 10px;
+  /* WhatsApp icon button (mobile menu) — replaces long pill CTA */
+  .m-menu-cta-icon {
+    margin: 14px auto 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-family: var(--font-assistant), var(--font-rubik), sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #fff;
-    background: var(--sage);
-    padding: 14px 22px;
-    border-radius: 999px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     text-decoration: none;
-    min-height: 48px;
-    box-shadow: 0 6px 18px -6px rgba(134, 162, 150, 0.55);
+    transition: transform 0.15s ease;
+  }
+  .m-menu-cta-icon:active { transform: scale(0.94); }
+  .m-menu-cta-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
   }
 
   /* ─── Mobile bottom bar — SINGLE ROW: TOPTIK | 3 cats | MANDARINA DUCK
@@ -238,9 +240,14 @@ body {
   }
   .m-bb-cats {
     display: flex;
-    flex: 1;
-    justify-content: space-around;
-    gap: 5px;
+    /* No flex:1 → cats take only their content width.
+       margin-inline-end:auto fills LEFT side (RTL) → pushes cats RIGHT toward TOPTIK,
+       making the right gap (cats↔TOPTIK) ≈ left gap (cats↔MANDARINA). */
+    flex: 0 0 auto;
+    justify-content: center;
+    gap: 14px;
+    margin-inline-end: auto;
+    margin-inline-start: 12px;
   }
   .m-bb-cat {
     display: flex;

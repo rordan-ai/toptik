@@ -56,22 +56,20 @@ export default function Home() {
           </nav>
 
           <a
-            className="cta"
+            className="cta-icon"
             href="https://wa.me/"
             target="_blank"
             rel="noopener"
-            dir="rtl"
+            aria-label="דברו איתנו בוואטסאפ"
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.82 11.82 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.464 3.488" />
-            </svg>
-            דברו איתנו בוואטסאפ
+            <Image
+              src="/whatsapp.png"
+              alt="WhatsApp"
+              width={1024}
+              height={1024}
+              unoptimized
+              priority
+            />
           </a>
         </header>
 
@@ -87,8 +85,10 @@ export default function Home() {
             className="bottom-bar-img"
             priority
           />
-          {/* Overlay: cream rectangle covering baked TOPTIK + new transparent logo */}
-          <div className="bb-toptik-overlay">
+          {/* Layer 1: cream rect covers baked TOPTIK */}
+          <div className="bb-toptik-overlay" />
+          {/* Layer 2: transparent enlarged logo (above all, extends upward) */}
+          <div className="bb-toptik-logo">
             <Image
               src="/toptik-logo-trans.png"
               alt="TopTik"
@@ -237,26 +237,26 @@ export default function Home() {
         .navbar nav a:hover { color: #8a6a2d; }
         .navbar nav a:hover::after { transform: scaleX(1); }
 
-        .navbar .cta {
+        /* WhatsApp icon-only CTA — replaces long pill button */
+        .navbar .cta-icon {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          font-family: var(--font-assistant), var(--font-rubik), sans-serif;
-          font-size: clamp(12px, 1.05vw, 15px);
-          font-weight: 700;
-          color: #fff;
-          background: var(--sage);
-          padding: 12px 22px;
-          border-radius: 999px;
+          justify-content: center;
+          width: clamp(40px, 3vw, 48px);
+          height: clamp(40px, 3vw, 48px);
+          border-radius: 50%;
           text-decoration: none;
-          white-space: nowrap;
-          box-shadow: 0 6px 18px -6px rgba(134,162,150,0.55);
-          transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+          transition: transform .2s ease, filter .2s ease;
         }
-        .navbar .cta:hover {
-          background: var(--sage-dark);
-          box-shadow: 0 8px 22px -6px rgba(134,162,150,0.7);
-          transform: translateY(-1px);
+        .navbar .cta-icon img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+        }
+        .navbar .cta-icon:hover {
+          transform: translateY(-1px) scale(1.05);
+          filter: brightness(1.08);
         }
 
         /* ===== BOTTOM BAR =====
@@ -281,28 +281,39 @@ export default function Home() {
           object-position: center bottom;
           image-rendering: -webkit-optimize-contrast;
         }
-        /* Overlay covering the BAKED TOPTIK logo + new transparent logo.
-           User asked: TOPTIK 2× bigger on desktop.
-           Original: right 1.2%, top 14%, width 17%, bottom 6%.
-           Doubled width to 32% (≈2× wider) → logo scales up proportionally.
-           Stays within the bar (no overflow into hero). */
+        /* WRAPPING TECHNIQUE — bar/elements stay original; ONLY logo enlarges.
+           Cover (cream) is the ORIGINAL 17% area that hides baked TOPTIK.
+           Logo IMG inside is scaled 2× via transform with overflow:visible →
+           it grows upward into hero space (transparent PNG, no visual conflict)
+           and slightly wider but anchored right so it doesn't reach MANDARINA. */
+        /* Cream cover (stays at original 17% — hides baked TOPTIK exactly) */
         .bb-toptik-overlay {
           position: absolute;
           right: 1.2%;
-          top: 8%;
-          bottom: 4%;
-          width: 30%;
+          top: 14%;
+          bottom: 6%;
+          width: 17%;
           background: #f1e5d3;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0 8px;
-          z-index: 2;
+          z-index: 5;
         }
-        .bb-toptik-overlay img {
+        /* Scaled logo — separate layer ABOVE both bar + mandarina,
+           anchored RIGHT (own dedicated area, no leftward growth into mandarina).
+           Grows ONLY upward into hero zone (transparent PNG). */
+        .bb-toptik-logo {
+          position: absolute;
+          right: 1.2%;
+          bottom: 4%;
+          /* Doubled visual size of the original 17% cover area */
+          width: 17%;
+          height: 200%;          /* = 2× bar height, extends UP into hero */
+          z-index: 10;           /* above MANDARINA (which is in baked image at z<5) */
+          pointer-events: none;
+        }
+        .bb-toptik-logo img {
           width: 100%;
           height: 100%;
           object-fit: contain;
+          object-position: right bottom;   /* anchor logo to right-bottom of its area */
         }
 
         /* Lowered breakpoint: nav hides only on real mobile (<560px),
@@ -311,7 +322,7 @@ export default function Home() {
           .stage { aspect-ratio: 4 / 5; }
           .navbar { height: 14%; padding: 0 14px; }
           .navbar nav { display: none; }
-          .navbar .cta { padding: 8px 12px; font-size: 11px; }
+          .navbar .cta-icon { width: 36px; height: 36px; }
           .brand .title { font-size: 15px; letter-spacing: 0.16em; }
           .brand .slogan { font-size: 13px; }
         }
