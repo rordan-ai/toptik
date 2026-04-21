@@ -200,20 +200,24 @@ body {
     transition: background 0.15s ease;
   }
   .m-menu nav a:active { background: rgba(31, 39, 49, 0.06); }
-  /* WhatsApp icon button (mobile menu) — replaces long pill CTA */
-  .m-menu-cta-icon {
-    margin: 14px auto 4px;
+  /* WhatsApp icon — sits next to hamburger in top bar */
+  .m-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .m-wa-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     text-decoration: none;
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease, filter 0.15s ease;
   }
-  .m-menu-cta-icon:active { transform: scale(0.94); }
-  .m-menu-cta-icon img {
+  .m-wa-icon:active { transform: scale(0.94); }
+  .m-wa-icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;

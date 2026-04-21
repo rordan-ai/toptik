@@ -61,14 +61,31 @@ export default function MobileLayer() {
           <div className="m-title">TOPTIK COLLECTION</div>
           <div className="m-slogan">Move in Style.</div>
         </div>
-        <button
-          className="m-burger"
-          aria-label={open ? "סגור תפריט" : "פתח תפריט"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className={`m-burger-icon ${open ? "is-open" : ""}`} />
-        </button>
+        <div className="m-topbar-actions">
+          <a
+            className="m-wa-icon"
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener"
+            aria-label="דברו איתנו בוואטסאפ"
+          >
+            <Image
+              src="/whatsapp.png"
+              alt="WhatsApp"
+              width={1024}
+              height={1024}
+              unoptimized
+            />
+          </a>
+          <button
+            className="m-burger"
+            aria-label={open ? "סגור תפריט" : "פתח תפריט"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className={`m-burger-icon ${open ? "is-open" : ""}`} />
+          </button>
+        </div>
       </header>
 
       {/* Slide-down menu */}
@@ -80,22 +97,6 @@ export default function MobileLayer() {
             </a>
           ))}
         </nav>
-        <a
-          className="m-menu-cta-icon"
-          href="https://wa.me/"
-          target="_blank"
-          rel="noopener"
-          aria-label="דברו איתנו בוואטסאפ"
-          onClick={() => setOpen(false)}
-        >
-          <Image
-            src="/whatsapp.png"
-            alt="WhatsApp"
-            width={1024}
-            height={1024}
-            unoptimized
-          />
-        </a>
       </div>
 
       {/* Bottom bar — single row: TOPTIK logo | 3 categories | MANDARINA DUCK logo */}
