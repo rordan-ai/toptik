@@ -249,18 +249,22 @@ export default function Home() {
         }
         .bottom-bar-img {
           object-fit: contain;
-          object-position: center center;
+          /* Items in source image are pinned to top (4px top padding vs 14px bottom).
+             Push image to BOTTOM of container → all extra cream appears above
+             → final result: 14px above items + 14px below items = perfectly centered */
+          object-position: center bottom;
           image-rendering: -webkit-optimize-contrast;
         }
 
-        @media (max-width: 720px) {
+        /* Lowered breakpoint: nav hides only on real mobile (<560px),
+           not on narrow desktop preview windows */
+        @media (max-width: 560px) {
           .stage { aspect-ratio: 4 / 5; }
           .navbar { height: 14%; padding: 0 14px; }
           .navbar nav { display: none; }
           .navbar .cta { padding: 8px 12px; font-size: 11px; }
           .brand .title { font-size: 15px; letter-spacing: 0.16em; }
           .brand .slogan { font-size: 13px; }
-          /* Mobile keeps natural aspect ratio - no override needed */
         }
       `}</style>
     </div>
