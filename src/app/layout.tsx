@@ -48,6 +48,13 @@ export const metadata: Metadata = {
   description: "TopTik — דף נחיתה רשמי",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover" as const,
+  themeColor: "#fdf8ee",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

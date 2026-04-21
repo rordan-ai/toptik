@@ -34,14 +34,25 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE LAYER (<768px)
-   Fully isolated from desktop. Activates only below 768px.
-   Desktop UI is hidden via the .m-layer rule below.
+   MOBILE LAYER — fully isolated from desktop.
+   Activates ≤ 1023px (covers all phones, foldables, iPad mini, iPad Air).
+   Desktop layout serves only ≥ 1024px (iPad Pro 13" and real desktops).
    ═══════════════════════════════════════════════════════════════ */
 
 /* Hide mobile layer at desktop sizes */
 .m-layer { display: none; }
 
+/* ─────── TABLET TIGHTEN (768-1023px) ───────
+   Tablets keep desktop layout but with touch-friendly sizing.
+   Affects ONLY desktop layout on tablet — mobile layer untouched. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .navbar { padding: 0 18px; }
+  .navbar .cta { padding: 13px 20px; min-height: 44px; }
+  .navbar nav { gap: 18px; }
+  .navbar nav a { font-size: 14px; padding: 10px 4px; min-height: 40px; }
+}
+
+/* ─────── MOBILE LAYER (≤767px) ─────── */
 @media (max-width: 767px) {
   /* Activate mobile, hide desktop bars */
   .m-layer { display: block; }
@@ -50,14 +61,17 @@ body {
   .stage { aspect-ratio: auto; min-height: 100dvh; }
   .stage > img { object-position: 70% center !important; }
 
-  /* ─── Mobile top bar ─── */
+  /* ─── Mobile top bar (with notch / Dynamic Island safe area) ─── */
   .m-topbar {
     position: absolute;
     left: 0; right: 0; top: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 18px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-bottom: 14px;
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
     z-index: 10;
     direction: ltr;
     background: rgba(253, 248, 238, 0.92);
@@ -126,11 +140,13 @@ body {
   /* ─── Mobile slide-down menu ─── */
   .m-menu {
     position: absolute;
-    left: 0; right: 0; top: 72px;
+    left: 0; right: 0;
+    top: calc(72px + env(safe-area-inset-top));
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 0 18px;
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
     background: rgba(253, 248, 238, 0.97);
     backdrop-filter: blur(14px) saturate(1.1);
     -webkit-backdrop-filter: blur(14px) saturate(1.1);
@@ -144,7 +160,8 @@ body {
   }
   .m-menu.is-open {
     max-height: 360px;
-    padding: 14px 18px 22px;
+    padding-top: 14px;
+    padding-bottom: 22px;
     opacity: 1;
     pointer-events: auto;
   }
@@ -185,14 +202,17 @@ body {
     box-shadow: 0 6px 18px -6px rgba(134, 162, 150, 0.55);
   }
 
-  /* ─── Mobile bottom bar (HTML/CSS) ─── */
+  /* ─── Mobile bottom bar (with home-indicator safe area) ─── */
   .m-bottombar {
     position: absolute;
     left: 0; right: 0; bottom: 0;
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 14px 18px 18px;
+    padding-top: 14px;
+    padding-bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px));
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
     z-index: 5;
     background: #f1e5d3;
     border-top: 1px solid rgba(31, 39, 49, 0.06);
@@ -245,4 +265,43 @@ body {
     letter-spacing: 0.22em;
     color: var(--ink);
   }
+}
+
+/* ─────── MOBILE LANDSCAPE (phones turned sideways) ───────
+   Compress vertical sizing - hero height limited, bars thinner. */
+@media (max-width: 932px) and (orientation: landscape) and (max-height: 500px) {
+  .m-topbar {
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: 8px;
+  }
+  .m-title { font-size: 14px; }
+  .m-slogan { font-size: 12px; }
+  .m-burger { width: 38px; height: 38px; }
+
+  .m-menu { top: calc(56px + env(safe-area-inset-top)); }
+  .m-menu nav a { padding: 10px 8px; min-height: 40px; font-size: 15px; }
+
+  /* Bottom bar — single row instead of stacked, smaller items */
+  .m-bottombar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-top: 8px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .m-bb-cats { gap: 12px; flex: 1; }
+  .m-bb-cat { gap: 2px; }
+  .m-bb-icon { width: 28px; height: 28px; }
+  .m-bb-icon svg { width: 18px; height: 18px; }
+  .m-bb-label { font-size: 9px; }
+  .m-bb-brands {
+    flex-direction: column;
+    padding-top: 0;
+    border-top: none;
+    gap: 4px;
+    align-items: flex-end;
+  }
+  .m-bb-mandarina { font-size: 10px; letter-spacing: 0.14em; }
+  .m-bb-toptik { font-size: 14px; letter-spacing: 0.18em; }
 }
