@@ -10,9 +10,9 @@ export default function Home() {
   return (
     <div className="page">
       <div className="stage" data-variant="v1">
-        {/* Hero image fills the stage — high quality, no Next.js compression */}
+        {/* Hero (without baked-in bottom bar) */}
         <Image
-          src="/hero-toptik.png"
+          src="/hero-clean.png"
           alt="TopTik Hero"
           fill
           priority
@@ -22,38 +22,34 @@ export default function Home() {
           className="hero-img"
         />
 
-        {/* Top scrim — softens top so navbar copy is readable */}
+        {/* Top scrim */}
         <div className="scrim-top" aria-hidden />
         <div className="warm-tone" aria-hidden />
         <div className="halation" aria-hidden />
         <div className="vignette" aria-hidden />
 
-        {/* ─── NAVBAR ─── */}
+        {/* ─── TOP NAVBAR (restored to original) ─── */}
         <header className="navbar">
-          <div className="navbar-inner">
-            {/* Brand left */}
-            <div className="brand">
-              <div className="title">TOPTIK COLLECTION</div>
-              <div className="slogan">Move in Style. Travel with Purpose.</div>
-            </div>
+          <div className="brand">
+            <div className="title">TOPTIK COLLECTION</div>
+            <div className="slogan">Move in Style. Travel with Purpose.</div>
+          </div>
 
-            {/* Hebrew nav RTL */}
-            <nav aria-label="Primary" dir="rtl">
-              {navItems.map((item) => (
-                <a key={item.href} href={item.href}>
-                  {item.label}
-                </a>
-              ))}
-            </nav>
+          <nav aria-label="Primary" dir="rtl">
+            {navItems.map((item) => (
+              <a key={item.href} href={item.href}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
 
-            {/* WhatsApp CTA */}
-            <a
-              className="cta"
-              href="https://wa.me/"
-              target="_blank"
-              rel="noopener"
-              dir="rtl"
-            >
+          <a
+            className="cta"
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener"
+            dir="rtl"
+          >
             <svg
               viewBox="0 0 24 24"
               width="16"
@@ -63,13 +59,25 @@ export default function Home() {
             >
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.82 11.82 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.82 11.82 0 0 0 20.464 3.488" />
             </svg>
-              דברו איתנו בוואטסאפ
-            </a>
-          </div>
+            דברו איתנו בוואטסאפ
+          </a>
         </header>
+
+        {/* ─── BOTTOM BAR (separate image - now editable) ─── */}
+        <div className="bottom-bar">
+          <Image
+            src="/bottom-bar.png"
+            alt="TopTik categories: חומרי גלם איכותיים, פונקציונליות חכמה, עיצוב איטלקי, MANDARINA DUCK, TOPTIK"
+            fill
+            quality={100}
+            unoptimized
+            sizes="100vw"
+            className="bottom-bar-img"
+            priority
+          />
+        </div>
       </div>
 
-      {/* ─── INLINE STAGE STYLES ─── */}
       <style>{`
         .page {
           max-width: 1366px;
@@ -81,21 +89,20 @@ export default function Home() {
           width: 100%;
           aspect-ratio: 1366 / 768;
           overflow: hidden;
-          background: #111;
+          background: #fdf8ee;
           box-shadow: 0 30px 80px rgba(0,0,0,0.3);
         }
 
         .hero-img {
           object-fit: cover;
-          object-position: center;
+          object-position: center top;
           filter:
             contrast(var(--contrast))
             saturate(var(--sat))
             brightness(var(--brightness));
-          /* Crisp rendering hints */
           image-rendering: -webkit-optimize-contrast;
           image-rendering: crisp-edges;
-          transform: translateZ(0); /* GPU layer for sharper compositing */
+          transform: translateZ(0);
           backface-visibility: hidden;
         }
 
@@ -133,31 +140,21 @@ export default function Home() {
             radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(0,0,0, calc(var(--vignette) * 0.55)) 100%);
         }
 
-        /* ===== NAVBAR =====
-           Anti-pattern avoided: don't set fixed % height with clamp() content.
-           Instead: let content define height, vertical padding controls "thickness".
-           Symmetric padding-top == padding-bottom = perfect vertical centering. */
+        /* ===== TOP NAVBAR (RESTORED to original Figma spec) ===== */
         .navbar {
           position: absolute;
           left: 0; right: 0; top: 0;
+          height: 11.5%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 clamp(18px, 3.2%, 48px);
           z-index: 6;
           direction: ltr;
 
           background: var(--bar-bg);
           backdrop-filter: blur(12px) saturate(1.08);
           -webkit-backdrop-filter: blur(12px) saturate(1.08);
-
-          /* Symmetric vertical padding controls bar thickness  */
-          padding-top: clamp(8px, 1.2vh, 14px);
-          padding-bottom: clamp(8px, 1.2vh, 14px);
-          padding-left: clamp(18px, 3.2%, 48px);
-          padding-right: clamp(18px, 3.2%, 48px);
-        }
-        .navbar-inner {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
         }
 
         .brand {
@@ -223,8 +220,7 @@ export default function Home() {
           font-weight: 700;
           color: #fff;
           background: var(--sage);
-          /* Reduced from 12px 22px → tighter button matches slimmer bar */
-          padding: 8px 18px;
+          padding: 12px 22px;
           border-radius: 999px;
           text-decoration: none;
           white-space: nowrap;
@@ -237,18 +233,33 @@ export default function Home() {
           transform: translateY(-1px);
         }
 
+        /* ===== BOTTOM BAR =====
+           Original baked-in bar: 102 / 768 = 13.28% of stage height
+           User asked: shrink ~10% + center items vertically
+           → container height: 11.95% (≈10% smaller) on cream background
+           → bar image: object-fit:contain, vertically centered = perfect symmetric padding */
+        .bottom-bar {
+          position: absolute;
+          left: 0; right: 0; bottom: 0;
+          height: 11.95%;
+          background: #fdf8ee;
+          z-index: 5;
+          overflow: hidden;
+        }
+        .bottom-bar-img {
+          object-fit: contain;
+          object-position: center center;
+          image-rendering: -webkit-optimize-contrast;
+        }
+
         @media (max-width: 720px) {
           .stage { aspect-ratio: 4 / 5; }
-          .navbar {
-            padding-top: 8px;
-            padding-bottom: 8px;
-            padding-left: 14px;
-            padding-right: 14px;
-          }
+          .navbar { height: 14%; padding: 0 14px; }
           .navbar nav { display: none; }
-          .navbar .cta { padding: 6px 12px; font-size: 11px; }
+          .navbar .cta { padding: 8px 12px; font-size: 11px; }
           .brand .title { font-size: 15px; letter-spacing: 0.16em; }
           .brand .slogan { font-size: 13px; }
+          .bottom-bar { height: 14%; }
         }
       `}</style>
     </div>
