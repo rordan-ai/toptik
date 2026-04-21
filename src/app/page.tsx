@@ -133,30 +133,31 @@ export default function Home() {
             radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(0,0,0, calc(var(--vignette) * 0.55)) 100%);
         }
 
-        /* ===== NAVBAR ===== */
+        /* ===== NAVBAR =====
+           Anti-pattern avoided: don't set fixed % height with clamp() content.
+           Instead: let content define height, vertical padding controls "thickness".
+           Symmetric padding-top == padding-bottom = perfect vertical centering. */
         .navbar {
           position: absolute;
           left: 0; right: 0; top: 0;
-          /* Slightly reduced height (was 11.5%) */
-          height: 9.5%;
           z-index: 6;
           direction: ltr;
 
           background: var(--bar-bg);
           backdrop-filter: blur(12px) saturate(1.08);
           -webkit-backdrop-filter: blur(12px) saturate(1.08);
-          padding: 0 clamp(18px, 3.2%, 48px);
 
-          /* Wrap content + center vertically as one block */
-          display: flex;
-          align-items: center;
+          /* Symmetric vertical padding controls bar thickness  */
+          padding-top: clamp(8px, 1.2vh, 14px);
+          padding-bottom: clamp(8px, 1.2vh, 14px);
+          padding-left: clamp(18px, 3.2%, 48px);
+          padding-right: clamp(18px, 3.2%, 48px);
         }
         .navbar-inner {
           width: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          /* All children stay vertically centered as one wrapped unit */
         }
 
         .brand {
@@ -222,7 +223,8 @@ export default function Home() {
           font-weight: 700;
           color: #fff;
           background: var(--sage);
-          padding: 12px 22px;
+          /* Reduced from 12px 22px → tighter button matches slimmer bar */
+          padding: 8px 18px;
           border-radius: 999px;
           text-decoration: none;
           white-space: nowrap;
@@ -237,9 +239,14 @@ export default function Home() {
 
         @media (max-width: 720px) {
           .stage { aspect-ratio: 4 / 5; }
-          .navbar { height: 12%; padding: 0 14px; }
+          .navbar {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 14px;
+            padding-right: 14px;
+          }
           .navbar nav { display: none; }
-          .navbar .cta { padding: 8px 12px; font-size: 11px; }
+          .navbar .cta { padding: 6px 12px; font-size: 11px; }
           .brand .title { font-size: 15px; letter-spacing: 0.16em; }
           .brand .slogan { font-size: 13px; }
         }
