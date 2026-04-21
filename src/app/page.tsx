@@ -234,20 +234,18 @@ export default function Home() {
         }
 
         /* ===== BOTTOM BAR =====
-           Original baked-in bar: 102 / 768 = 13.28% of stage height
-           User asked: shrink ~10% + center items vertically
-           → container height: 11.95% (≈10% smaller) on cream background
-           → bar image: object-fit:contain, vertically centered = perfect symmetric padding */
+           Container locked to EXACT image aspect ratio (1368/102) → zero letterboxing.
+           No background needed - image fills perfectly edge-to-edge.
+           Bar height naturally = (102/1368) × stage_width = 102px on 1366px stage. */
         .bottom-bar {
           position: absolute;
           left: 0; right: 0; bottom: 0;
-          height: 11.95%;
-          background: #fdf8ee;
+          aspect-ratio: 1368 / 102;
           z-index: 5;
           overflow: hidden;
         }
         .bottom-bar-img {
-          object-fit: contain;
+          object-fit: cover;
           object-position: center center;
           image-rendering: -webkit-optimize-contrast;
         }
@@ -259,7 +257,7 @@ export default function Home() {
           .navbar .cta { padding: 8px 12px; font-size: 11px; }
           .brand .title { font-size: 15px; letter-spacing: 0.16em; }
           .brand .slogan { font-size: 13px; }
-          .bottom-bar { height: 14%; }
+          /* Mobile keeps natural aspect ratio - no override needed */
         }
       `}</style>
     </div>
