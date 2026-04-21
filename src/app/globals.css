@@ -224,8 +224,7 @@ body {
     display: block;
   }
 
-  /* ─── Mobile bottom bar — SINGLE ROW: TOPTIK | 3 cats | MANDARINA DUCK
-       All dimensions +20% per user request (heights, paddings, fonts, icons) ─── */
+  /* ─── Mobile bottom bar — TALLER + COMPACT cats ─── */
   .m-bottombar {
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -233,9 +232,9 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;                              /* was 6 → 7.2 */
-    padding-top: 10px;                     /* was 8 → 9.6 */
-    padding-bottom: max(10px, calc(env(safe-area-inset-bottom) + 5px));
+    gap: 8px;
+    padding-top: 14px;                                          /* +taller */
+    padding-bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px));
     padding-left: max(12px, env(safe-area-inset-left));
     padding-right: max(12px, env(safe-area-inset-right));
     z-index: 5;
@@ -244,20 +243,18 @@ body {
   }
   .m-bb-cats {
     display: flex;
-    /* No flex:1 → cats take only their content width.
-       margin-inline-end:auto fills LEFT side (RTL) → pushes cats RIGHT toward TOPTIK,
-       making the right gap (cats↔TOPTIK) ≈ left gap (cats↔MANDARINA). */
-    flex: 0 0 auto;
+    flex: 0 0 auto;                                              /* content-width only */
     justify-content: center;
-    gap: 14px;
-    margin-inline-end: auto;
+    gap: 6px;                                                    /* tighter between cats */
+    margin-inline-end: auto;                                     /* push RIGHT toward TOPTIK */
     margin-inline-start: 12px;
   }
   .m-bb-cat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
+    gap: 2px;
+    width: 55px;                                                 /* narrow, tight per request */
     color: var(--ink);
     line-height: 1;
   }
