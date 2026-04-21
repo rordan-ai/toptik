@@ -42,14 +42,20 @@ body {
 /* Hide mobile layer at desktop sizes */
 .m-layer { display: none; }
 
-/* ─────── Hero image swap by viewport ───────
-   Default: desktop visible, mobile hidden.
-   Below 768px: swap. */
+/* ─────── Hero image swap by viewport ─────── */
 .hero-desktop { display: block; }
 .hero-mobile  { display: none; }
+
 @media (max-width: 767px) {
   .hero-desktop { display: none !important; }
-  .hero-mobile  { display: block !important; object-position: center center !important; }
+  .hero-mobile {
+    display: block !important;
+    /* COVER fills entire stage (bars unchanged, float on top).
+       Anchor BOTTOM = sky (top 15-20% unnecessary) gets cropped,
+       suitcases area pushed UP into visible band above bottom bar. */
+    object-fit: cover !important;
+    object-position: center bottom !important;
+  }
 }
 
 /* ─────── TABLET TIGHTEN (768-1023px) ───────
