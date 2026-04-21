@@ -32,3 +32,217 @@ body {
   color: #fff;
   font-family: var(--font-rubik), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE LAYER (<768px)
+   Fully isolated from desktop. Activates only below 768px.
+   Desktop UI is hidden via the .m-layer rule below.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Hide mobile layer at desktop sizes */
+.m-layer { display: none; }
+
+@media (max-width: 767px) {
+  /* Activate mobile, hide desktop bars */
+  .m-layer { display: block; }
+  .stage > .navbar,
+  .stage > .bottom-bar { display: none !important; }
+  .stage { aspect-ratio: auto; min-height: 100dvh; }
+  .stage > img { object-position: 70% center !important; }
+
+  /* ─── Mobile top bar ─── */
+  .m-topbar {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    z-index: 10;
+    direction: ltr;
+    background: rgba(253, 248, 238, 0.92);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    border-bottom: 1px solid rgba(31, 39, 49, 0.06);
+  }
+  .m-brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+  .m-title {
+    font-family: var(--font-italiana), serif;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    font-size: 16px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .m-slogan {
+    font-family: var(--font-great-vibes), cursive;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 1px;
+    line-height: 1.1;
+  }
+  .m-burger {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(31, 39, 49, 0.18);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--ink);
+    padding: 0;
+    transition: transform 0.2s ease;
+  }
+  .m-burger:active { transform: scale(0.95); }
+
+  .m-burger-icon {
+    position: relative;
+    display: block;
+    width: 22px; height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: background 0.2s ease;
+  }
+  .m-burger-icon::before,
+  .m-burger-icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 22px; height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.3s ease, top 0.3s ease;
+  }
+  .m-burger-icon::before { top: -7px; }
+  .m-burger-icon::after { top: 7px; }
+  .m-burger-icon.is-open { background: transparent; }
+  .m-burger-icon.is-open::before { top: 0; transform: rotate(45deg); }
+  .m-burger-icon.is-open::after { top: 0; transform: rotate(-45deg); }
+
+  /* ─── Mobile slide-down menu ─── */
+  .m-menu {
+    position: absolute;
+    left: 0; right: 0; top: 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 18px;
+    background: rgba(253, 248, 238, 0.97);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    z-index: 9;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.3s ease;
+    border-bottom: 1px solid rgba(31, 39, 49, 0.06);
+  }
+  .m-menu.is-open {
+    max-height: 360px;
+    padding: 14px 18px 22px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .m-menu nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .m-menu nav a {
+    font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 14px 8px;
+    border-radius: 8px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s ease;
+  }
+  .m-menu nav a:active { background: rgba(31, 39, 49, 0.06); }
+  .m-menu-cta {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--sage);
+    padding: 14px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    min-height: 48px;
+    box-shadow: 0 6px 18px -6px rgba(134, 162, 150, 0.55);
+  }
+
+  /* ─── Mobile bottom bar (HTML/CSS) ─── */
+  .m-bottombar {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 18px 18px;
+    z-index: 5;
+    background: #f1e5d3;
+    border-top: 1px solid rgba(31, 39, 49, 0.06);
+  }
+  .m-bb-cats {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .m-bb-cat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink);
+  }
+  .m-bb-icon {
+    width: 38px; height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+  }
+  .m-bb-label {
+    font-family: var(--font-assistant), sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+    line-height: 1.2;
+  }
+  .m-bb-brands {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(31, 39, 49, 0.12);
+  }
+  .m-bb-mandarina {
+    font-family: var(--font-italiana), serif;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+  }
+  .m-bb-toptik {
+    font-family: var(--font-italiana), serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+  }
+}
