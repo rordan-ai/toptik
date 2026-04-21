@@ -265,17 +265,17 @@ body {
     text-align: center;
     line-height: 1.1;
   }
-  /* Brand logos flank the categories on the same row (real PNG logos) */
+  /* Brand logos flank the categories on the same row (transparent PNG logos) */
   .m-bb-toptik-img {
     flex-shrink: 0;
     width: auto;
-    height: 28px;
+    height: 32px;
     object-fit: contain;
   }
   .m-bb-mandarina-img {
     flex-shrink: 0;
     width: auto;
-    height: 14px;
+    height: 28px;
     object-fit: contain;
   }
 }
@@ -312,6 +312,6 @@ body {
   .m-bb-icon { width: 20px; height: 20px; }
   .m-bb-icon svg { width: 14px; height: 14px; }
   .m-bb-label { font-size: 8.5px; }
-  .m-bb-toptik-img { height: 22px; }
-  .m-bb-mandarina-img { height: 11px; }
+  .m-bb-toptik-img { height: 24px; }
+  .m-bb-mandarina-img { height: 22px; }
 }

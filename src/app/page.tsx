@@ -87,6 +87,17 @@ export default function Home() {
             className="bottom-bar-img"
             priority
           />
+          {/* Overlay: cream rectangle covering baked TOPTIK + new transparent logo */}
+          <div className="bb-toptik-overlay">
+            <Image
+              src="/toptik-logo-trans.png"
+              alt="TopTik"
+              width={380}
+              height={150}
+              unoptimized
+              priority
+            />
+          </div>
         </div>
 
         {/* ═══ MOBILE LAYER (<768px only - hidden on desktop via CSS) ═══ */}
@@ -269,6 +280,28 @@ export default function Home() {
              → final result: 14px above items + 14px below items = perfectly centered */
           object-position: center bottom;
           image-rendering: -webkit-optimize-contrast;
+        }
+        /* Overlay covering the BAKED TOPTIK logo with cream rect + new transparent logo on top.
+           Position calibrated to baked TOPTIK area in bottom-bar.png:
+           x=1130-1340 of 1368, y=10-92 of 102 → in 1366×112 container with image at bottom:
+           right edge ≈ 2%, left ≈ 82.5%, top ≈ 18%, bottom ≈ 0% */
+        .bb-toptik-overlay {
+          position: absolute;
+          right: 1.2%;
+          top: 14%;
+          bottom: 6%;
+          width: 17%;
+          background: #f1e5d3;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 6px;
+          z-index: 2;
+        }
+        .bb-toptik-overlay img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         /* Lowered breakpoint: nav hides only on real mobile (<560px),
