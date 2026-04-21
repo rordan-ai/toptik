@@ -218,69 +218,68 @@ body {
     box-shadow: 0 6px 18px -6px rgba(134, 162, 150, 0.55);
   }
 
-  /* ─── Mobile bottom bar — 40% smaller (was ~150px → now ~90px) ─── */
+  /* ─── Mobile bottom bar — SINGLE ROW: TOPTIK | 3 cats | MANDARINA DUCK ─── */
   .m-bottombar {
     position: absolute;
     left: 0; right: 0; bottom: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 6px;
     padding-top: 8px;
     padding-bottom: max(8px, calc(env(safe-area-inset-bottom) + 4px));
-    padding-left: max(14px, env(safe-area-inset-left));
-    padding-right: max(14px, env(safe-area-inset-right));
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
     z-index: 5;
     background: #f1e5d3;
     border-top: 1px solid rgba(31, 39, 49, 0.06);
   }
   .m-bb-cats {
     display: flex;
-    justify-content: space-between;
-    gap: 6px;
+    flex: 1;
+    justify-content: space-around;
+    gap: 4px;
   }
   .m-bb-cat {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 0;             /* tight icon→label spacing per user request */
     color: var(--ink);
+    line-height: 1;
   }
   .m-bb-icon {
-    width: 26px; height: 26px;
+    width: 22px; height: 22px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--ink);
   }
-  .m-bb-icon svg { width: 18px; height: 18px; }
+  .m-bb-icon svg { width: 16px; height: 16px; }
   .m-bb-label {
     font-family: var(--font-assistant), sans-serif;
-    font-size: 9.5px;
+    font-size: 9px;
     font-weight: 600;
     color: var(--ink);
     text-align: center;
-    line-height: 1.15;
+    line-height: 1.1;
   }
-  .m-bb-brands {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 5px;
-    border-top: 1px solid rgba(31, 39, 49, 0.12);
+  /* Brand logos flank the categories on the same row */
+  .m-bb-toptik {
+    font-family: var(--font-italiana), serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    flex-shrink: 0;
   }
   .m-bb-mandarina {
     font-family: var(--font-italiana), serif;
-    font-size: 11px;
-    letter-spacing: 0.16em;
+    font-size: 10px;
+    letter-spacing: 0.14em;
     color: var(--ink);
-  }
-  .m-bb-toptik {
-    font-family: var(--font-italiana), serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: var(--ink);
+    flex-shrink: 0;
   }
 }
 
@@ -298,27 +297,16 @@ body {
   .m-menu { top: calc(56px + env(safe-area-inset-top)); }
   .m-menu nav a { padding: 10px 8px; min-height: 40px; font-size: 15px; }
 
-  /* Bottom bar — single row instead of stacked, smaller items */
+  /* Bottom bar — already single row; just tighten spacing */
   .m-bottombar {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    padding-top: 8px;
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    gap: 8px;
+    padding-top: 6px;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
   }
-  .m-bb-cats { gap: 12px; flex: 1; }
-  .m-bb-cat { gap: 2px; }
-  .m-bb-icon { width: 28px; height: 28px; }
-  .m-bb-icon svg { width: 18px; height: 18px; }
-  .m-bb-label { font-size: 9px; }
-  .m-bb-brands {
-    flex-direction: column;
-    padding-top: 0;
-    border-top: none;
-    gap: 4px;
-    align-items: flex-end;
-  }
-  .m-bb-mandarina { font-size: 10px; letter-spacing: 0.14em; }
-  .m-bb-toptik { font-size: 14px; letter-spacing: 0.18em; }
+  .m-bb-cats { gap: 4px; }
+  .m-bb-icon { width: 20px; height: 20px; }
+  .m-bb-icon svg { width: 14px; height: 14px; }
+  .m-bb-label { font-size: 8.5px; }
+  .m-bb-toptik { font-size: 12px; }
+  .m-bb-mandarina { font-size: 9px; }
 }

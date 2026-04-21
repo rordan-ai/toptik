@@ -95,8 +95,9 @@ export default function MobileLayer() {
         </a>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — single row: TOPTIK | 3 categories | MANDARINA DUCK */}
       <div className="m-bottombar" dir="rtl">
+        <span className="m-bb-toptik">TOPTIK</span>
         <div className="m-bb-cats">
           {categories.map((c) => (
             <div key={c.label} className="m-bb-cat">
@@ -105,10 +106,7 @@ export default function MobileLayer() {
             </div>
           ))}
         </div>
-        <div className="m-bb-brands">
-          <span className="m-bb-mandarina">MANDARINA DUCK</span>
-          <span className="m-bb-toptik">TOPTIK</span>
-        </div>
+        <span className="m-bb-mandarina">MANDARINA DUCK</span>
       </div>
     </div>
   );
