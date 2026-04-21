@@ -122,8 +122,8 @@ export default function MobileLayer() {
         <Image
           src="/mandarina-logo-trans.png"
           alt="Mandarina Duck"
-          width={380}
-          height={150}
+          width={1430}
+          height={224}
           className="m-bb-mandarina-img"
           unoptimized
           priority

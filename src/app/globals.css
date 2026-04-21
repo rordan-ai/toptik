@@ -218,7 +218,8 @@ body {
     box-shadow: 0 6px 18px -6px rgba(134, 162, 150, 0.55);
   }
 
-  /* ─── Mobile bottom bar — SINGLE ROW: TOPTIK | 3 cats | MANDARINA DUCK ─── */
+  /* ─── Mobile bottom bar — SINGLE ROW: TOPTIK | 3 cats | MANDARINA DUCK
+       All dimensions +20% per user request (heights, paddings, fonts, icons) ─── */
   .m-bottombar {
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -226,11 +227,11 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
-    padding-top: 8px;
-    padding-bottom: max(8px, calc(env(safe-area-inset-bottom) + 4px));
-    padding-left: max(10px, env(safe-area-inset-left));
-    padding-right: max(10px, env(safe-area-inset-right));
+    gap: 8px;                              /* was 6 → 7.2 */
+    padding-top: 10px;                     /* was 8 → 9.6 */
+    padding-bottom: max(10px, calc(env(safe-area-inset-bottom) + 5px));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
     z-index: 5;
     background: #f1e5d3;
     border-top: 1px solid rgba(31, 39, 49, 0.06);
@@ -239,43 +240,43 @@ body {
     display: flex;
     flex: 1;
     justify-content: space-around;
-    gap: 4px;
+    gap: 5px;
   }
   .m-bb-cat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;             /* tight icon→label spacing per user request */
+    gap: 0;
     color: var(--ink);
     line-height: 1;
   }
   .m-bb-icon {
-    width: 22px; height: 22px;
+    width: 26px; height: 26px;             /* was 22 → 26.4 */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--ink);
   }
-  .m-bb-icon svg { width: 16px; height: 16px; }
+  .m-bb-icon svg { width: 19px; height: 19px; }   /* was 16 → 19.2 */
   .m-bb-label {
     font-family: var(--font-assistant), sans-serif;
-    font-size: 9px;
+    font-size: 11px;                       /* was 9 → 10.8 */
     font-weight: 600;
     color: var(--ink);
     text-align: center;
     line-height: 1.1;
   }
-  /* Brand logos flank the categories on the same row (transparent PNG logos) */
+  /* Brand logos flank the categories — all heights +20% */
   .m-bb-toptik-img {
     flex-shrink: 0;
     width: auto;
-    height: 32px;
+    height: 38px;                          /* was 32 → 38.4 */
     object-fit: contain;
   }
   .m-bb-mandarina-img {
     flex-shrink: 0;
     width: auto;
-    height: 28px;
+    height: 18px;                          /* was 28 → adjusted to match new aspect 6.38 */
     object-fit: contain;
   }
 }

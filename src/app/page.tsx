@@ -281,21 +281,22 @@ export default function Home() {
           object-position: center bottom;
           image-rendering: -webkit-optimize-contrast;
         }
-        /* Overlay covering the BAKED TOPTIK logo with cream rect + new transparent logo on top.
-           Position calibrated to baked TOPTIK area in bottom-bar.png:
-           x=1130-1340 of 1368, y=10-92 of 102 → in 1366×112 container with image at bottom:
-           right edge ≈ 2%, left ≈ 82.5%, top ≈ 18%, bottom ≈ 0% */
+        /* Overlay covering the BAKED TOPTIK logo + new transparent logo.
+           User asked: TOPTIK 2× bigger on desktop.
+           Original: right 1.2%, top 14%, width 17%, bottom 6%.
+           Doubled width to 32% (≈2× wider) → logo scales up proportionally.
+           Stays within the bar (no overflow into hero). */
         .bb-toptik-overlay {
           position: absolute;
           right: 1.2%;
-          top: 14%;
-          bottom: 6%;
-          width: 17%;
+          top: 8%;
+          bottom: 4%;
+          width: 30%;
           background: #f1e5d3;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 0 6px;
+          padding: 0 8px;
           z-index: 2;
         }
         .bb-toptik-overlay img {
