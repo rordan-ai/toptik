@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --scrim-strength: 0.55;
-  --grain: 0.09;
-  --vignette: 0.55;
-  --halation: 0.35;
-  --warm: 0.08;
-  --contrast: 1.07;
-  --sat: 0.94;
+  /* Reduced overlays to preserve original photo quality */
+  --scrim-strength: 0.28;
+  --grain: 0;
+  --vignette: 0.22;
+  --halation: 0.15;
+  --warm: 0.04;
+  /* Boost contrast/saturation slightly to keep punch */
+  --contrast: 1.04;
+  --sat: 1.04;
+  --brightness: 1.04;
   --sage: #86a296;
   --sage-dark: #728e82;
   --ink: #1f2731;

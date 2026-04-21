@@ -10,12 +10,14 @@ export default function Home() {
   return (
     <div className="page">
       <div className="stage" data-variant="v1">
-        {/* Hero image fills the stage */}
+        {/* Hero image fills the stage — high quality, no Next.js compression */}
         <Image
           src="/hero-toptik.png"
           alt="TopTik Hero"
           fill
           priority
+          quality={100}
+          unoptimized
           sizes="100vw"
           className="hero-img"
         />
@@ -87,7 +89,12 @@ export default function Home() {
           filter:
             contrast(var(--contrast))
             saturate(var(--sat))
-            brightness(calc(1 + var(--warm) * 0.08));
+            brightness(var(--brightness));
+          /* Crisp rendering hints */
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
+          transform: translateZ(0); /* GPU layer for sharper compositing */
+          backface-visibility: hidden;
         }
 
         .scrim-top {
