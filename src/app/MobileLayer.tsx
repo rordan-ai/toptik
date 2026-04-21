@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 const navItems = [
@@ -52,6 +53,10 @@ export default function MobileLayer() {
       if (e.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onEsc);
+    // Tag <html> with platform class so CSS can target Android only
+    if (typeof navigator !== "undefined" && /android/i.test(navigator.userAgent)) {
+      document.documentElement.classList.add("is-android");
+    }
     return () => window.removeEventListener("keydown", onEsc);
   }, []);
 
@@ -95,9 +100,17 @@ export default function MobileLayer() {
         </a>
       </div>
 
-      {/* Bottom bar — single row: TOPTIK | 3 categories | MANDARINA DUCK */}
+      {/* Bottom bar — single row: TOPTIK logo | 3 categories | MANDARINA DUCK logo */}
       <div className="m-bottombar" dir="rtl">
-        <span className="m-bb-toptik">TOPTIK</span>
+        <Image
+          src="/toptik-logo.png"
+          alt="TopTik"
+          width={697}
+          height={252}
+          className="m-bb-toptik-img"
+          unoptimized
+          priority
+        />
         <div className="m-bb-cats">
           {categories.map((c) => (
             <div key={c.label} className="m-bb-cat">
@@ -106,7 +119,15 @@ export default function MobileLayer() {
             </div>
           ))}
         </div>
-        <span className="m-bb-mandarina">MANDARINA DUCK</span>
+        <Image
+          src="/mandarina-logo.png"
+          alt="Mandarina Duck"
+          width={375}
+          height={61}
+          className="m-bb-mandarina-img"
+          unoptimized
+          priority
+        />
       </div>
     </div>
   );

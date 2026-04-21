@@ -265,21 +265,26 @@ body {
     text-align: center;
     line-height: 1.1;
   }
-  /* Brand logos flank the categories on the same row */
-  .m-bb-toptik {
-    font-family: var(--font-italiana), serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    color: var(--ink);
+  /* Brand logos flank the categories on the same row (real PNG logos) */
+  .m-bb-toptik-img {
     flex-shrink: 0;
+    width: auto;
+    height: 28px;
+    object-fit: contain;
   }
-  .m-bb-mandarina {
-    font-family: var(--font-italiana), serif;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    color: var(--ink);
+  .m-bb-mandarina-img {
     flex-shrink: 0;
+    width: auto;
+    height: 14px;
+    object-fit: contain;
+  }
+}
+
+/* ─────── ANDROID-ONLY (S24+ etc) — extra hero lift +10px ───────
+   iOS keeps current 20px lift; Android gets 30px so a bit more floor visible. */
+@media (max-width: 767px) {
+  .is-android .hero-mobile {
+    bottom: 30px !important;
   }
 }
 
@@ -307,6 +312,6 @@ body {
   .m-bb-icon { width: 20px; height: 20px; }
   .m-bb-icon svg { width: 14px; height: 14px; }
   .m-bb-label { font-size: 8.5px; }
-  .m-bb-toptik { font-size: 12px; }
-  .m-bb-mandarina { font-size: 9px; }
+  .m-bb-toptik-img { height: 22px; }
+  .m-bb-mandarina-img { height: 11px; }
 }
