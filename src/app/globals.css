@@ -50,11 +50,10 @@ body {
   .hero-desktop { display: none !important; }
   .hero-mobile {
     display: block !important;
-    /* COVER + bottom anchor + LIFT 20px (bottom inset) so the suitcases
-       area is pulled up above the bottom bar */
     object-fit: cover !important;
     object-position: center bottom !important;
-    bottom: 20px !important;
+    /* Lift hero higher (was 20 → 60px) — more floor + bottom area visible */
+    bottom: 60px !important;
   }
 }
 
@@ -278,13 +277,13 @@ body {
   .m-bb-toptik-img {
     flex-shrink: 0;
     width: auto;
-    height: 38px;                          /* was 32 → 38.4 */
+    height: 52px;                          /* enlarged per latest request */
     object-fit: contain;
   }
   .m-bb-mandarina-img {
     flex-shrink: 0;
     width: auto;
-    height: 18px;                          /* was 28 → adjusted to match new aspect 6.38 */
+    height: 18px;
     object-fit: contain;
   }
 }
@@ -293,7 +292,7 @@ body {
    iOS keeps current 20px lift; Android gets 30px so a bit more floor visible. */
 @media (max-width: 767px) {
   .is-android .hero-mobile {
-    bottom: 30px !important;
+    bottom: 70px !important;     /* +10px more on Android per earlier rule */
   }
 }
 
