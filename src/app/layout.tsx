@@ -1,40 +1,60 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Heebo, Space_Mono } from "next/font/google";
+import {
+  Italiana,
+  Great_Vibes,
+  Rubik,
+  Playfair_Display,
+  Assistant,
+} from "next/font/google";
 import "./globals.css";
+
+const italiana = Italiana({
+  subsets: ["latin"],
+  variable: "--font-italiana",
+  weight: ["400"],
+  display: "swap",
+});
+
+const greatVibes = Great_Vibes({
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
+  weight: ["400"],
+  display: "swap",
+});
+
+const rubik = Rubik({
+  subsets: ["latin", "hebrew"],
+  variable: "--font-rubik",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const heebo = Heebo({
+const assistant = Assistant({
   subsets: ["latin", "hebrew"],
-  variable: "--font-heebo",
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "700"],
+  variable: "--font-assistant",
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TopTik Hot Collection | Mandarina Duck",
-  description: "כי כל מסע מגיע לתיק הנכון",
+  title: "TopTik Collection — Move in Style. Travel with Purpose.",
+  description: "TopTik — דף נחיתה רשמי",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="he" dir="ltr">
+    <html lang="he" dir="rtl">
       <body
-        className={`${playfair.variable} ${heebo.variable} ${spaceMono.variable} antialiased`}
+        className={`${italiana.variable} ${greatVibes.variable} ${rubik.variable} ${playfair.variable} ${assistant.variable} antialiased`}
       >
         {children}
       </body>

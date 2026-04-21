@@ -1,21 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --gold-1: #b0a030;
-  --gold-2: #c4b03a;
-  --gold-3: #d4bc48;
-  --gold-4: #e0cc60;
-  --gold-5: #ecd878;
-  --gold-6: #f4e898;
-  --gold-7: #faf4c0;
-  --text-dark: #514d4d;
-  --text-mid: #4a4646;
-  --teal: #1190af;
-  --teal-dark: #0880a3;
-  --white: #ffffff;
-  --font-playfair: var(--font-playfair);
-  --font-heebo: var(--font-heebo);
-  --font-mono: var(--font-mono);
+  --scrim-strength: 0.55;
+  --grain: 0.09;
+  --vignette: 0.55;
+  --halation: 0.35;
+  --warm: 0.08;
+  --contrast: 1.07;
+  --sat: 0.94;
+  --sage: #86a296;
+  --sage-dark: #728e82;
+  --ink: #1f2731;
+  --ink-soft: #3a4551;
+  --bar-bg: rgba(253, 248, 238, 0.75);
 }
 
 *,
@@ -28,24 +25,7 @@
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  font-family: var(--font-heebo), "Heebo", sans-serif;
-  background: linear-gradient(
-    180deg,
-    #a89a28 0%,
-    #b8aa34 12%,
-    #c8b840 24%,
-    #d4c450 36%,
-    #dece64 48%,
-    #e8d878 60%,
-    #f0e490 72%,
-    #f6eeaa 84%,
-    #faf4c4 100%
-  );
-  min-height: 100vh;
+  background: #0a0a0a;
+  color: #fff;
+  font-family: var(--font-rubik), "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
