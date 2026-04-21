@@ -234,18 +234,21 @@ export default function Home() {
         }
 
         /* ===== BOTTOM BAR =====
-           Container locked to EXACT image aspect ratio (1368/102) → zero letterboxing.
-           No background needed - image fills perfectly edge-to-edge.
-           Bar height naturally = (102/1368) × stage_width = 102px on 1366px stage. */
+           Strategy: container is 10% TALLER than image natural aspect (1368/102).
+           New aspect: 1368 / (102 × 1.1) = 1368 / 112.2.
+           Background = exact sampled cream (#f1e5d3) of the bar = visually continuous.
+           object-fit:contain keeps items at original size + center-aligns vertically
+           → equal cream space above and below bar items = perfectly centered items. */
         .bottom-bar {
           position: absolute;
           left: 0; right: 0; bottom: 0;
-          aspect-ratio: 1368 / 102;
+          aspect-ratio: 1368 / 112.2;
+          background: #f1e5d3;
           z-index: 5;
           overflow: hidden;
         }
         .bottom-bar-img {
-          object-fit: cover;
+          object-fit: contain;
           object-position: center center;
           image-rendering: -webkit-optimize-contrast;
         }
