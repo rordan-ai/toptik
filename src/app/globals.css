@@ -50,11 +50,11 @@ body {
   .hero-desktop { display: none !important; }
   .hero-mobile {
     display: block !important;
-    /* COVER fills entire stage (bars unchanged, float on top).
-       Anchor BOTTOM = sky (top 15-20% unnecessary) gets cropped,
-       suitcases area pushed UP into visible band above bottom bar. */
+    /* COVER + bottom anchor + LIFT 20px (bottom inset) so the suitcases
+       area is pulled up above the bottom bar */
     object-fit: cover !important;
     object-position: center bottom !important;
+    bottom: 20px !important;
   }
 }
 
@@ -218,17 +218,17 @@ body {
     box-shadow: 0 6px 18px -6px rgba(134, 162, 150, 0.55);
   }
 
-  /* ─── Mobile bottom bar (with home-indicator safe area) ─── */
+  /* ─── Mobile bottom bar — 40% smaller (was ~150px → now ~90px) ─── */
   .m-bottombar {
     position: absolute;
     left: 0; right: 0; bottom: 0;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding-top: 14px;
-    padding-bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px));
-    padding-left: max(18px, env(safe-area-inset-left));
-    padding-right: max(18px, env(safe-area-inset-right));
+    gap: 6px;
+    padding-top: 8px;
+    padding-bottom: max(8px, calc(env(safe-area-inset-bottom) + 4px));
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
     z-index: 5;
     background: #f1e5d3;
     border-top: 1px solid rgba(31, 39, 49, 0.06);
@@ -236,49 +236,50 @@ body {
   .m-bb-cats {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
   }
   .m-bb-cat {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 2px;
     color: var(--ink);
   }
   .m-bb-icon {
-    width: 38px; height: 38px;
+    width: 26px; height: 26px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--ink);
   }
+  .m-bb-icon svg { width: 18px; height: 18px; }
   .m-bb-label {
     font-family: var(--font-assistant), sans-serif;
-    font-size: 11px;
+    font-size: 9.5px;
     font-weight: 600;
     color: var(--ink);
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.15;
   }
   .m-bb-brands {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 12px;
+    padding-top: 5px;
     border-top: 1px solid rgba(31, 39, 49, 0.12);
   }
   .m-bb-mandarina {
     font-family: var(--font-italiana), serif;
-    font-size: 14px;
-    letter-spacing: 0.18em;
+    font-size: 11px;
+    letter-spacing: 0.16em;
     color: var(--ink);
   }
   .m-bb-toptik {
     font-family: var(--font-italiana), serif;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     color: var(--ink);
   }
 }
