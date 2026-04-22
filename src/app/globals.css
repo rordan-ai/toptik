@@ -239,32 +239,34 @@ body {
     border-top: 1px solid rgba(31, 39, 49, 0.06);
   }
 
-  /* TOPTIK logo — Mobile Small (320+).
-     object-fit: cover matches Figma source spec (image fills box, crops white margins of square PNG).
+  /* TOPTIK logo — Mobile Small (320+). Contain to avoid cropping.
      Left margin equals cat-1 right margin for symmetric composition. */
   .m-bb-toptik-img {
     position: absolute;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: left center;
     border-radius: 4px;
     mix-blend-mode: multiply;
     left: 38px;
     top: 12px;
     width: 90px;
     height: 51px;
+    z-index: 2;
   }
 
-  /* MANDARINA logo — Mobile Small (320+).
-     object-fit: cover matches Figma source spec.
+  /* MANDARINA logo — Mobile Small (320+). Contain shows full duck + text without cropping.
      Left margin = cat-1 right margin (16px) for symmetry. */
   .m-bb-mandarina-img {
     position: absolute;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: left center;
     border-radius: 4px;
     mix-blend-mode: multiply;
     left: 16px;
     top: 26px;
     width: 135px;
     height: 74px;
+    z-index: 1;
   }
 
   /* Category container — base (Mobile Small) */
