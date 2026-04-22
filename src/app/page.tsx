@@ -90,7 +90,7 @@ export default function Home() {
           {/* Layer 2: transparent enlarged logo (above all, extends upward) */}
           <div className="bb-toptik-logo">
             <Image
-              src="/toptik-logo-trans.png"
+              src="/toptiklogo.png"
               alt="TopTik"
               width={380}
               height={150}
