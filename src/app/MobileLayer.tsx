@@ -102,10 +102,10 @@ export default function MobileLayer() {
       {/* Bottom bar — single row: TOPTIK logo | 3 categories | MANDARINA DUCK logo */}
       <div className="m-bottombar" dir="rtl">
         <Image
-          src="/toptik-logo-trans.png"
+          src="/toptik-logo-mobile.png"
           alt="TopTik"
-          width={380}
-          height={150}
+          width={2000}
+          height={2000}
           className="m-bb-toptik-img"
           unoptimized
           priority

@@ -51,9 +51,11 @@ body {
   .hero-mobile {
     display: block !important;
     object-fit: cover !important;
-    object-position: center bottom !important;
-    /* Lift hero higher (was 20 → 60px) — more floor + bottom area visible */
-    bottom: 60px !important;
+    object-position: center top !important;
+    /* Extend image above viewport so storefront sign top kisses top of screen */
+    top: -90px !important;
+    bottom: auto !important;
+    height: calc(100% + 90px) !important;
   }
 }
 
@@ -242,18 +244,21 @@ body {
   }
   .m-bb-cats {
     display: flex;
-    flex: 0 0 auto;                                              /* content-width only */
+    flex: 0 0 auto;
     justify-content: center;
-    gap: 6px;                                                    /* tighter between cats */
-    margin-inline-end: auto;                                     /* push RIGHT toward TOPTIK */
-    margin-inline-start: 12px;
+    gap: 4px;
+    /* Pull cats toward TOPTIK (RIGHT in RTL).
+       margin-inline-end:auto fills LEFT side in RTL → pushes cats RIGHT toward TOPTIK.
+       Leaves the freed LEFT space for MANDARINA so it stays inside the bar. */
+    margin-inline-start: 6px;
+    margin-inline-end: auto;
   }
   .m-bb-cat {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    width: 55px;                                                 /* narrow, tight per request */
+    width: 44px;                                                 /* tighter to free room for MANDARINA */
     color: var(--ink);
     line-height: 1;
   }
@@ -277,24 +282,20 @@ body {
   .m-bb-toptik-img {
     flex-shrink: 0;
     width: auto;
-    height: 52px;                          /* enlarged per latest request */
+    height: 52px;                          /* keeps bar height unchanged */
+    max-width: 90px;
     object-fit: contain;
   }
   .m-bb-mandarina-img {
     flex-shrink: 0;
     width: auto;
-    height: 18px;
+    height: 30px;
+    max-width: 92px;
     object-fit: contain;
   }
 }
 
-/* ─────── ANDROID-ONLY (S24+ etc) — extra hero lift +10px ───────
-   iOS keeps current 20px lift; Android gets 30px so a bit more floor visible. */
-@media (max-width: 767px) {
-  .is-android .hero-mobile {
-    bottom: 70px !important;     /* +10px more on Android per earlier rule */
-  }
-}
+/* ─────── ANDROID-ONLY override removed — unified top-anchored hero ─────── */
 
 /* ─────── MOBILE LANDSCAPE (phones turned sideways) ───────
    Compress vertical sizing - hero height limited, bars thinner. */
