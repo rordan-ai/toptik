@@ -104,8 +104,8 @@ export default function MobileLayer() {
         <Image
           src="/toptiklogo.png"
           alt="TopTik"
-          width={1024}
-          height={1024}
+          width={380}
+          height={150}
           className="m-bb-toptik-img"
           unoptimized
           priority

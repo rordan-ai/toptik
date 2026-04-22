@@ -239,14 +239,12 @@ body {
     border-top: 1px solid rgba(31, 39, 49, 0.06);
   }
 
-  /* TOPTIK logo — Mobile Small (320+). Contain to avoid cropping.
-     Left margin equals cat-1 right margin for symmetric composition. */
+  /* TOPTIK logo — Mobile Small (320+). Source: 380x150 transparent PNG (tight crop).
+     No mix-blend-mode needed (already transparent). Contain preserves aspect. */
   .m-bb-toptik-img {
     position: absolute;
     object-fit: contain;
     object-position: left center;
-    border-radius: 4px;
-    mix-blend-mode: multiply;
     left: 38px;
     top: 12px;
     width: 90px;
