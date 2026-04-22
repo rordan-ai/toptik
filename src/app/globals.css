@@ -223,69 +223,93 @@ body {
     display: block;
   }
 
-  /* ─── Mobile bottom bar — TALLER + COMPACT cats ─── */
+  /* ─── Mobile bottom bar — Figma 3-tier responsive (320/375/414) ───
+     Source: Figma file XZi1IBJvng6Ahw4Xt4CtlI (Mobile Small/Medium/Large frames).
+     Bar height fixed 88px. Every child absolutely positioned, no flex grouping.
+     mix-blend-mode: multiply removes the white PNG background so logos blend onto cream bar. */
   .m-bottombar {
     position: absolute;
     left: 0; right: 0; bottom: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding-top: 14px;                                          /* +taller */
-    padding-bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px));
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    height: 88px;
     z-index: 5;
     background: #f1e5d3;
     border-top: 1px solid rgba(31, 39, 49, 0.06);
   }
-  .m-bb-cats {
-    display: flex;
-    flex: 0 0 auto;                                              /* content-width only */
-    justify-content: center;
-    gap: 6px;                                                    /* tighter between cats */
-    margin-inline-end: auto;                                     /* push RIGHT toward TOPTIK */
-    margin-inline-start: 12px;
+
+  /* TOPTIK logo — Mobile Small (320+) */
+  .m-bb-toptik-img {
+    position: absolute;
+    object-fit: contain;
+    border-radius: 4px;
+    mix-blend-mode: multiply;
+    left: 22px;
+    top: 12px;
+    width: 90px;
+    height: 51px;
   }
+
+  /* MANDARINA logo — Mobile Small (320+) */
+  .m-bb-mandarina-img {
+    position: absolute;
+    object-fit: contain;
+    border-radius: 4px;
+    mix-blend-mode: multiply;
+    left: 0;
+    top: 26px;
+    width: 135px;
+    height: 74px;
+  }
+
+  /* Category container — base (Mobile Small) */
   .m-bb-cat {
+    position: absolute;
+    top: 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    width: 55px;                                                 /* narrow, tight per request */
     color: var(--ink);
     line-height: 1;
   }
   .m-bb-icon {
-    width: 26px; height: 26px;             /* was 22 → 26.4 */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--ink);
   }
-  .m-bb-icon svg { width: 19px; height: 19px; }   /* was 16 → 19.2 */
+  .m-bb-icon svg { width: 19px; height: 19px; }
   .m-bb-label {
     font-family: var(--font-assistant), sans-serif;
-    font-size: 11px;                       /* was 9 → 10.8 */
+    font-size: 11px;
     font-weight: 600;
     color: var(--ink);
     text-align: center;
     line-height: 1.1;
   }
-  /* Brand logos flank the categories — all heights +20% */
-  .m-bb-toptik-img {
-    flex-shrink: 0;
-    width: auto;
-    height: 52px;                          /* enlarged per latest request */
-    object-fit: contain;
-  }
-  .m-bb-mandarina-img {
-    flex-shrink: 0;
-    width: auto;
-    height: 18px;
-    object-fit: contain;
-  }
+
+  /* Per-cat positioning — Mobile Small (320+) */
+  .m-bb-cat-1 { left: 265px; width: 39px; }
+  .m-bb-cat-2 { left: 190px; width: 58px; }
+  .m-bb-cat-3 { left: 126px; width: 46px; }
+}
+
+/* ─── Mobile Medium (375+) overrides per Figma ─── */
+@media (min-width: 375px) and (max-width: 767px) {
+  .m-bb-toptik-img { left: 25px; top: 12px; width: 103px; height: 55px; }
+  .m-bb-mandarina-img { left: 0; top: 26px; width: 154px; height: 79px; }
+  .m-bb-cat-1 { left: 302px; width: 44px; }
+  .m-bb-cat-2 { left: 223px; width: 53px; }
+  .m-bb-cat-3 { left: 153px; width: 44px; }
+}
+
+/* ─── Mobile Large (414+) overrides per Figma ─── */
+@media (min-width: 414px) and (max-width: 767px) {
+  .m-bb-toptik-img { left: 26px; top: 3px; width: 131px; height: 64px; }
+  .m-bb-mandarina-img { left: -6px; top: 20px; width: 196px; height: 93px; }
+  .m-bb-cat { top: 15px; }
+  .m-bb-cat-1 { left: 343px; width: 44px; }
+  .m-bb-cat-2 { left: 263px; width: 55px; }
+  .m-bb-cat-3 { left: 194px; width: 44px; }
 }
 
 /* ─────── ANDROID-ONLY (S24+ etc) — extra hero lift +10px ───────
@@ -310,16 +334,6 @@ body {
   .m-menu { top: calc(56px + env(safe-area-inset-top)); }
   .m-menu nav a { padding: 10px 8px; min-height: 40px; font-size: 15px; }
 
-  /* Bottom bar — already single row; just tighten spacing */
-  .m-bottombar {
-    gap: 8px;
-    padding-top: 6px;
-    padding-bottom: max(6px, env(safe-area-inset-bottom));
-  }
-  .m-bb-cats { gap: 4px; }
-  .m-bb-icon { width: 20px; height: 20px; }
-  .m-bb-icon svg { width: 14px; height: 14px; }
-  .m-bb-label { font-size: 8.5px; }
-  .m-bb-toptik-img { height: 24px; }
-  .m-bb-mandarina-img { height: 22px; }
+  /* Bottom bar in landscape — keep portrait 3-tier sizing per Figma.
+     If landscape needs custom sizing, design a 4th Figma frame and add overrides here. */
 }

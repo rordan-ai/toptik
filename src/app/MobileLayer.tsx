@@ -99,25 +99,17 @@ export default function MobileLayer() {
         </nav>
       </div>
 
-      {/* Bottom bar — single row: TOPTIK logo | 3 categories | MANDARINA DUCK logo */}
+      {/* Bottom bar — Figma 3-tier responsive (320/375/414). Each element absolutely positioned, all siblings. */}
       <div className="m-bottombar" dir="rtl">
         <Image
-          src="/toptik-logo-trans.png"
+          src="/toptiklogo.png"
           alt="TopTik"
-          width={380}
-          height={150}
+          width={1024}
+          height={1024}
           className="m-bb-toptik-img"
           unoptimized
           priority
         />
-        <div className="m-bb-cats">
-          {categories.map((c) => (
-            <div key={c.label} className="m-bb-cat">
-              <div className="m-bb-icon">{c.icon}</div>
-              <div className="m-bb-label">{c.label}</div>
-            </div>
-          ))}
-        </div>
         <Image
           src="/mandarina-logo-trans.png"
           alt="Mandarina Duck"
@@ -127,6 +119,12 @@ export default function MobileLayer() {
           unoptimized
           priority
         />
+        {categories.map((c, i) => (
+          <div key={c.label} className={`m-bb-cat m-bb-cat-${i + 1}`}>
+            <div className="m-bb-icon">{c.icon}</div>
+            <div className="m-bb-label">{c.label}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
