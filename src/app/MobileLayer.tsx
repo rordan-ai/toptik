@@ -99,26 +99,18 @@ export default function MobileLayer() {
         </nav>
       </div>
 
-      {/* Bottom bar — Figma 3-tier responsive (320/375/414). Each element absolutely positioned, all siblings. */}
+      {/* Bottom bar — Figma 3-tier responsive (320/375/414). Logos sourced as exact SVG exports per tier. */}
       <div className="m-bottombar" dir="rtl">
-        <Image
-          src="/toptiklogo.png"
-          alt="TopTik"
-          width={380}
-          height={150}
-          className="m-bb-toptik-img"
-          unoptimized
-          priority
-        />
-        <Image
-          src="/mandarina-logo-trans.png"
-          alt="Mandarina Duck"
-          width={1430}
-          height={224}
-          className="m-bb-mandarina-img"
-          unoptimized
-          priority
-        />
+        <picture className="m-bb-toptik-pic">
+          <source media="(min-width: 414px)" srcSet="/bb-logos/toptik-414.svg" />
+          <source media="(min-width: 375px)" srcSet="/bb-logos/toptik-375.svg" />
+          <img src="/bb-logos/toptik-320.svg" alt="TopTik" className="m-bb-toptik-img" />
+        </picture>
+        <picture className="m-bb-mandarina-pic">
+          <source media="(min-width: 414px)" srcSet="/bb-logos/mandarina-414.svg" />
+          <source media="(min-width: 375px)" srcSet="/bb-logos/mandarina-375.svg" />
+          <img src="/bb-logos/mandarina-320.svg" alt="Mandarina Duck" className="m-bb-mandarina-img" />
+        </picture>
         {categories.map((c, i) => (
           <div key={c.label} className={`m-bb-cat m-bb-cat-${i + 1}`}>
             <div className="m-bb-icon">{c.icon}</div>

@@ -239,12 +239,12 @@ body {
     border-top: 1px solid rgba(31, 39, 49, 0.06);
   }
 
-  /* TOPTIK logo — Mobile Small (320+). Source: 380x150 transparent PNG (tight crop).
-     No mix-blend-mode needed (already transparent). Contain preserves aspect. */
+  /* TOPTIK logo — Mobile Small (320+). Source: SVG export from Figma (per-tier via <picture>).
+     SVG has exact box size matching width/height below. mix-blend-mode removes embedded white bg. */
   .m-bb-toptik-img {
     position: absolute;
-    object-fit: contain;
-    object-position: left center;
+    display: block;
+    mix-blend-mode: multiply;
     left: 38px;
     top: 12px;
     width: 90px;
@@ -252,13 +252,10 @@ body {
     z-index: 2;
   }
 
-  /* MANDARINA logo — Mobile Small (320+). Contain shows full duck + text without cropping.
-     Left margin = cat-1 right margin (16px) for symmetry. */
+  /* MANDARINA logo — Mobile Small (320+). Source: SVG export from Figma. */
   .m-bb-mandarina-img {
     position: absolute;
-    object-fit: contain;
-    object-position: left center;
-    border-radius: 4px;
+    display: block;
     mix-blend-mode: multiply;
     left: 16px;
     top: 26px;
