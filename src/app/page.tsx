@@ -105,15 +105,16 @@ export default function Home() {
       </div>
 
       <style>{`
+        /* Desktop standard: full FullHD 1920x1080 (16:9). Stage scales proportionally below. */
         .page {
-          max-width: 1366px;
+          max-width: 1920px;
           margin: 0 auto;
         }
 
         .stage {
           position: relative;
           width: 100%;
-          aspect-ratio: 1366 / 768;
+          aspect-ratio: 16 / 9;
           overflow: hidden;
           background: #fdf8ee;
           box-shadow: 0 30px 80px rgba(0,0,0,0.3);
