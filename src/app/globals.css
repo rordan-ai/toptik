@@ -51,9 +51,12 @@ body {
   .hero-mobile {
     display: block !important;
     object-fit: cover !important;
-    object-position: center bottom !important;
-    /* Lift hero higher (was 20 → 60px) — more floor + bottom area visible */
-    bottom: 60px !important;
+    object-position: center top !important;
+    /* Extend image above viewport so storefront sign top kisses top of screen.
+       Image extends 90px above viewport top + container grows by 90px → no clipping at bottom. */
+    top: -90px !important;
+    bottom: auto !important;
+    height: calc(100% + 90px) !important;
   }
 }
 
@@ -237,10 +240,11 @@ body {
   }
 
   /* TOPTIK logo — Mobile Small (320+).
+     object-fit: cover matches Figma source spec (image fills box, crops white margins of square PNG).
      Left margin equals cat-1 right margin for symmetric composition. */
   .m-bb-toptik-img {
     position: absolute;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 4px;
     mix-blend-mode: multiply;
     left: 38px;
@@ -250,10 +254,11 @@ body {
   }
 
   /* MANDARINA logo — Mobile Small (320+).
+     object-fit: cover matches Figma source spec.
      Left margin = cat-1 right margin (16px) for symmetry. */
   .m-bb-mandarina-img {
     position: absolute;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 4px;
     mix-blend-mode: multiply;
     left: 16px;
