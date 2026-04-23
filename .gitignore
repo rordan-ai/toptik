@@ -45,3 +45,4 @@ next-env.d.ts
 # Test/dev artifacts (screenshots, browser captures)
 .playwright-mcp/
 /*.png
+/*.bundle
