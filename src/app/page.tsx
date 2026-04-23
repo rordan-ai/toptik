@@ -7,13 +7,44 @@ const navItems = [
   { href: "#stores", label: "סניפים" },
 ];
 
+const bbCategories = [
+  {
+    label: "עיצוב איטלקי",
+    sublabel: "אלגנטיות על-זמנית",
+    icon: (
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <path d="M5 21V10l7-6 7 6v11M3 21h18M9 21v-6h6v6M9 8h.01M12 8h.01M15 8h.01" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    label: "פונקציונליות חכמה",
+    sublabel: "חכמת חדשנית",
+    icon: (
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" strokeLinejoin="round" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    label: "חומרי גלם איכותיים",
+    sublabel: "איכות יוצאת דופן",
+    icon: (
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <path d="M6 3l-4 6 10 12L22 9l-4-6H6z M11 3 L8 9 L12 21 L16 9 L13 3 M2 9h20" strokeLinejoin="round" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+];
+
 export default function Home() {
   return (
     <div className="page">
       <div className="stage" data-variant="v1">
         {/* Hero — desktop landscape (1366x666) */}
         <Image
-          src="/hero-clean.png"
+          src="/hero-web-airport.png"
           alt="TopTik Hero"
           fill
           priority
@@ -23,16 +54,17 @@ export default function Home() {
           className="hero-img hero-desktop"
         />
 
-        {/* Hero — mobile portrait (different artwork, only on mobile) */}
-        <Image
-          src="/hero-mobile.png"
-          alt="TopTik Hero Mobile"
-          fill
-          quality={100}
-          unoptimized
-          sizes="100vw"
-          className="hero-img hero-mobile"
-        />
+        {/* Hero — mobile portrait (3 responsive source sizes: 320/375/414) */}
+        <picture className="hero-mobile-picture">
+          <source media="(min-width: 414px)" srcSet="/hero-mobile-sizes/hero-mobile-414.png" />
+          <source media="(min-width: 375px)" srcSet="/hero-mobile-sizes/hero-mobile-375.png" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-mobile-sizes/hero-mobile-320.png"
+            alt="TopTik Hero Mobile"
+            className="hero-img hero-mobile"
+          />
+        </picture>
 
         {/* Top scrim */}
         <div className="scrim-top" aria-hidden />
@@ -62,40 +94,54 @@ export default function Home() {
             rel="noopener"
             aria-label="דברו איתנו בוואטסאפ"
           >
-            <Image
-              src="/whatsapp.png"
-              alt="WhatsApp"
-              width={1024}
-              height={1024}
-              unoptimized
-              priority
-            />
+            <span className="cta-text">צ'וטטו עימנו</span>
+            <span className="cta-icon-badge" aria-hidden>
+              <Image
+                src="/whatsapp.png"
+                alt="WhatsApp"
+                width={1024}
+                height={1024}
+                unoptimized
+                priority
+              />
+            </span>
           </a>
         </header>
 
-        {/* ─── BOTTOM BAR (separate image - now editable) ─── */}
-        <div className="bottom-bar">
-          <Image
-            src="/bottom-bar.png"
-            alt="TopTik categories: חומרי גלם איכותיים, פונקציונליות חכמה, עיצוב איטלקי, MANDARINA DUCK, TOPTIK"
-            fill
-            quality={100}
-            unoptimized
-            sizes="100vw"
-            className="bottom-bar-img"
-            priority
-          />
-          {/* Layer 1: cream rect covers baked TOPTIK */}
-          <div className="bb-toptik-overlay" />
-          {/* Layer 2: transparent enlarged logo (above all, extends upward) */}
-          <div className="bb-toptik-logo">
-            <Image
+        {/* ─── BOTTOM BAR — fully composed of independent elements (no baked PNG) ─── */}
+        <div className="bottom-bar" dir="rtl">
+          {/* TopTik logo (right in RTL) */}
+          <div className="bb-logo-slot bb-toptik">
+            {/* Plain img — avoids Next.js Image inline style height override that breaks CSS centering */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/toptiklogo.png"
               alt="TopTik"
-              width={380}
-              height={150}
-              unoptimized
-              priority
+              className="bb-logo-img bb-toptik-img"
+            />
+          </div>
+
+          {/* 3 categories (icon + label + sublabel) */}
+          <div className="bb-cats">
+            {bbCategories.map((c, i) => (
+              <div key={c.label} className={`bb-cat bb-cat-${i + 1}`}>
+                <div className="bb-cat-icon">{c.icon}</div>
+                <div className="bb-cat-text">
+                  <div className="bb-cat-label">{c.label}</div>
+                  <div className="bb-cat-sublabel">{c.sublabel}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* MANDARINA DUCK logo (left in RTL) */}
+          <div className="bb-logo-slot bb-mandarina">
+            {/* Use plain <img> for SVG to keep crisp vector at any scale */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/bb-logos/mandarina-414.svg"
+              alt="Mandarina Duck"
+              className="bb-logo-img bb-mandarina-img"
             />
           </div>
         </div>
@@ -105,19 +151,20 @@ export default function Home() {
       </div>
 
       <style>{`
-        /* Desktop standard: full FullHD 1920x1080 (16:9). Stage scales proportionally below. */
+        /* Desktop: stage ALWAYS fills full viewport (width + height) — no side margins, no scroll.
+           Hero image stretches/crops via object-fit:cover to whatever aspect the viewport is. */
         .page {
-          max-width: 1920px;
-          margin: 0 auto;
+          margin: 0;
+          width: 100%;
         }
 
         .stage {
+          --bb-h: 11.57dvh;
           position: relative;
-          width: 100%;
-          aspect-ratio: 16 / 9;
+          width: 100vw;
+          height: 100dvh;
           overflow: hidden;
           background: #fdf8ee;
-          box-shadow: 0 30px 80px rgba(0,0,0,0.3);
         }
 
         .hero-img {
@@ -131,6 +178,26 @@ export default function Home() {
           image-rendering: crisp-edges;
           transform: translateZ(0);
           backface-visibility: hidden;
+        }
+        .hero-mobile-picture {
+          position: absolute;
+          inset: 0;
+          display: block;
+        }
+        .hero-mobile-picture .hero-mobile {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .hero-desktop {
+          top: 0 !important;
+          right: 0 !important;
+          bottom: auto !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: calc(100% - var(--bb-h)) !important;
+          object-position: center bottom;
         }
 
         .scrim-top {
@@ -211,9 +278,13 @@ export default function Home() {
         }
 
         .navbar nav {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
           display: flex;
           align-items: center;
           gap: clamp(14px, 2.2vw, 30px);
+          z-index: 1;
         }
         .navbar nav a {
           font-family: var(--font-assistant), var(--font-rubik), sans-serif;
@@ -238,18 +309,34 @@ export default function Home() {
         .navbar nav a:hover { color: #8a6a2d; }
         .navbar nav a:hover::after { transform: scaleX(1); }
 
-        /* WhatsApp icon-only CTA — replaces long pill button */
+        /* WhatsApp CTA */
         .navbar .cta-icon {
           display: inline-flex;
           align-items: center;
-          justify-content: center;
-          width: clamp(40px, 3vw, 48px);
-          height: clamp(40px, 3vw, 48px);
-          border-radius: 50%;
+          justify-content: flex-end;
+          gap: clamp(6px, 0.7vw, 10px);
+          min-height: clamp(40px, 3vw, 48px);
           text-decoration: none;
           transition: transform .2s ease, filter .2s ease;
         }
-        .navbar .cta-icon img {
+        .navbar .cta-text {
+          font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+          font-size: clamp(12px, 0.95vw, 15px);
+          font-weight: 700;
+          color: var(--ink);
+          white-space: nowrap;
+          line-height: 1;
+        }
+        .navbar .cta-icon-badge {
+          width: clamp(40px, 3vw, 48px);
+          height: clamp(40px, 3vw, 48px);
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 auto;
+        }
+        .navbar .cta-icon-badge img {
           width: 100%;
           height: 100%;
           object-fit: contain;
@@ -260,61 +347,110 @@ export default function Home() {
           filter: brightness(1.08);
         }
 
-        /* ===== BOTTOM BAR =====
-           Strategy: container is 10% TALLER than image natural aspect (1368/102).
-           New aspect: 1368 / (102 × 1.1) = 1368 / 112.2.
-           Background = exact sampled cream (#f1e5d3) of the bar = visually continuous.
-           object-fit:contain keeps items at original size + center-aligns vertically
-           → equal cream space above and below bar items = perfectly centered items. */
+        /* ===== BOTTOM BAR — flex row of independent elements =====
+           Bar height = 11.57% of stage = 11.57vh.
+           Logos taller than bar: toptik=19.3vh (167%), mandarina=16.9vh (146%).
+           Each logo container is its own flex cell — fully isolated, no shared sizing. */
         .bottom-bar {
           position: absolute;
           left: 0; right: 0; bottom: 0;
-          aspect-ratio: 1368 / 112.2;
+          height: var(--bb-h);          /* 125px at 1080 stage */
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 clamp(16px, 2%, 36px);
+          gap: clamp(12px, 2%, 32px);
           background: #f1e5d3;
+          border-top: 1px solid rgba(31, 39, 49, 0.06);
           z-index: 5;
-          overflow: hidden;
+          overflow: visible;             /* logos allowed to grow above bar */
         }
-        .bottom-bar-img {
+
+        /* — TopTik logo (right in RTL) — isolated flex cell, vh-based height */
+        .bb-logo-slot {
+          flex: 0 0 auto;
+          position: relative;
+          height: 100%;
+          line-height: 0;
+          overflow: visible;
+        }
+        .bb-toptik {
+          width: calc(var(--bb-h) * 4.23);
+        }
+        .bb-mandarina {
+          width: calc(var(--bb-h) * 2.9);
+        }
+
+        .bb-logo-img {
+          --logo-y-offset: 0px;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, calc(-50% + var(--logo-y-offset)));
+          width: auto;
           object-fit: contain;
-          /* Items in source image are pinned to top (4px top padding vs 14px bottom).
-             Push image to BOTTOM of container → all extra cream appears above
-             → final result: 14px above items + 14px below items = perfectly centered */
-          object-position: center bottom;
-          image-rendering: -webkit-optimize-contrast;
+          flex-shrink: 0;
+          display: block;
         }
-        /* WRAPPING TECHNIQUE — bar/elements stay original; ONLY logo enlarges.
-           Cover (cream) is the ORIGINAL 17% area that hides baked TOPTIK.
-           Logo IMG inside is scaled 2× via transform with overflow:visible →
-           it grows upward into hero space (transparent PNG, no visual conflict)
-           and slightly wider but anchored right so it doesn't reach MANDARINA. */
-        /* Cream cover (stays at original 17% — hides baked TOPTIK exactly) */
-        .bb-toptik-overlay {
-          position: absolute;
-          right: 1.2%;
-          top: 14%;
-          bottom: 6%;
-          width: 17%;
-          background: #f1e5d3;
-          z-index: 5;
+
+        .bb-toptik-img {
+          --logo-y-offset: 6px;               /* optical correction: move down */
+          height: calc(var(--bb-h) * 1.67);  /* 167% of bar */
         }
-        /* Scaled logo — separate layer ABOVE both bar + mandarina,
-           anchored RIGHT (own dedicated area, no leftward growth into mandarina).
-           Grows ONLY upward into hero zone (transparent PNG). */
-        .bb-toptik-logo {
-          position: absolute;
-          right: 1.2%;
-          bottom: 4%;
-          /* Doubled visual size of the original 17% cover area */
-          width: 17%;
-          height: 200%;          /* = 2× bar height, extends UP into hero */
-          z-index: 10;           /* above MANDARINA (which is in baked image at z<5) */
-          pointer-events: none;
+
+        /* — Categories (center, evenly spaced) — */
+        .bb-cats {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: clamp(20px, 3vw, 56px);
         }
-        .bb-toptik-logo img {
+        .bb-cat {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: clamp(8px, 0.8vw, 14px);
+          color: var(--ink);
+          line-height: 1.1;
+        }
+        .bb-cat-icon {
+          flex: 0 0 auto;
+          width: clamp(22px, 1.8vw, 32px);
+          height: clamp(22px, 1.8vw, 32px);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .bb-cat-icon svg {
           width: 100%;
           height: 100%;
-          object-fit: contain;
-          object-position: right bottom;   /* anchor logo to right-bottom of its area */
+        }
+        .bb-cat-text {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .bb-cat-label {
+          font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+          font-size: clamp(13px, 1vw, 16px);
+          font-weight: 600;
+          color: var(--ink);
+        }
+        .bb-cat-sublabel {
+          font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+          font-size: clamp(11px, 0.78vw, 13px);
+          font-weight: 400;
+          color: var(--ink-soft);
+          margin-top: 1px;
+        }
+
+        /* — MANDARINA DUCK logo (left in RTL) — isolated flex cell, vh-based height */
+        .bb-mandarina-img {
+          --logo-y-offset: -12px;             /* optical correction: move up */
+          height: calc(var(--bb-h) * 1.46);  /* 146% of bar */
         }
 
         /* Lowered breakpoint: nav hides only on real mobile (<560px),
@@ -323,7 +459,9 @@ export default function Home() {
           .stage { aspect-ratio: 4 / 5; }
           .navbar { height: 14%; padding: 0 14px; }
           .navbar nav { display: none; }
-          .navbar .cta-icon { width: 36px; height: 36px; }
+          .navbar .cta-icon { gap: 6px; }
+          .navbar .cta-icon-badge { width: 36px; height: 36px; }
+          .navbar .cta-text { font-size: 12px; }
           .brand .title { font-size: 15px; letter-spacing: 0.16em; }
           .brand .slogan { font-size: 13px; }
         }

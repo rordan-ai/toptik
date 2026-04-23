@@ -46,10 +46,8 @@ export default function MobileLayer() {
       if (e.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onEsc);
-    // Tag <html> with platform class so CSS can target Android only
-    if (typeof navigator !== "undefined" && /android/i.test(navigator.userAgent)) {
-      document.documentElement.classList.add("is-android");
-    }
+    // Safety cleanup: remove old runtime class that caused hero jump on Android.
+    document.documentElement.classList.remove("is-android");
     return () => window.removeEventListener("keydown", onEsc);
   }, []);
 
@@ -69,13 +67,16 @@ export default function MobileLayer() {
             rel="noopener"
             aria-label="דברו איתנו בוואטסאפ"
           >
-            <Image
-              src="/whatsapp.png"
-              alt="WhatsApp"
-              width={1024}
-              height={1024}
-              unoptimized
-            />
+            <span className="m-wa-label">צ'וטטו עימנו</span>
+            <span className="m-wa-badge" aria-hidden>
+              <Image
+                src="/whatsapp.png"
+                alt="WhatsApp"
+                width={1024}
+                height={1024}
+                unoptimized
+              />
+            </span>
           </a>
           <button
             className="m-burger"
