@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const navItems = [
@@ -60,6 +61,9 @@ export default function MobileLayer() {
           <div className="m-slogan">Move in Style.</div>
         </div>
         <div className="m-topbar-actions">
+          <Link className="m-catalog-btn" href="/carousel" aria-label="כניסה לקטלוג">
+            קטלוג
+          </Link>
           <a
             className="m-wa-icon"
             href="https://wa.me/"
@@ -67,7 +71,7 @@ export default function MobileLayer() {
             rel="noopener"
             aria-label="דברו איתנו בוואטסאפ"
           >
-            <span className="m-wa-label">צ'וטטו עימנו</span>
+            <span className="m-wa-label">צ&#39;וטטו עימנו</span>
             <span className="m-wa-badge" aria-hidden>
               <Image
                 src="/whatsapp.png"

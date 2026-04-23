@@ -1,5 +1,6 @@
 ﻿import Image from "next/image";
 import MobileLayer from "./MobileLayer";
+import { HomeToCarouselCta } from "@/components/carousel/HomeToCarouselCta";
 
 const navItems = [
   { href: "#deals", label: "מבצעים" },
@@ -58,7 +59,6 @@ export default function Home() {
         <picture className="hero-mobile-picture">
           <source media="(min-width: 414px)" srcSet="/hero-mobile-sizes/hero-mobile-414.png" />
           <source media="(min-width: 375px)" srcSet="/hero-mobile-sizes/hero-mobile-375.png" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/hero-mobile-sizes/hero-mobile-320.png"
             alt="TopTik Hero Mobile"
@@ -87,25 +87,28 @@ export default function Home() {
             ))}
           </nav>
 
-          <a
-            className="cta-icon"
-            href="https://wa.me/"
-            target="_blank"
-            rel="noopener"
-            aria-label="דברו איתנו בוואטסאפ"
-          >
-            <span className="cta-text">צ'וטטו עימנו</span>
-            <span className="cta-icon-badge" aria-hidden>
-              <Image
-                src="/whatsapp.png"
-                alt="WhatsApp"
-                width={1024}
-                height={1024}
-                unoptimized
-                priority
-              />
-            </span>
-          </a>
+          <div className="cta-actions">
+            <HomeToCarouselCta heroImageUrl="/hero-web-airport.png" />
+            <a
+              className="cta-icon"
+              href="https://wa.me/"
+              target="_blank"
+              rel="noopener"
+              aria-label="דברו איתנו בוואטסאפ"
+            >
+              <span className="cta-text">צ&#39;וטטו עימנו</span>
+              <span className="cta-icon-badge" aria-hidden>
+                <Image
+                  src="/whatsapp.png"
+                  alt="WhatsApp"
+                  width={1024}
+                  height={1024}
+                  unoptimized
+                  priority
+                />
+              </span>
+            </a>
+          </div>
         </header>
 
         {/* ─── BOTTOM BAR — fully composed of independent elements (no baked PNG) ─── */}
@@ -309,6 +312,43 @@ export default function Home() {
         .navbar nav a:hover { color: #8a6a2d; }
         .navbar nav a:hover::after { transform: scaleX(1); }
 
+        .cta-actions {
+          display: flex;
+          align-items: center;
+          gap: clamp(8px, 0.8vw, 12px);
+        }
+
+        .enter-catalog-btn {
+          border: 1px solid rgba(31, 39, 49, 0.22);
+          background: rgba(255, 255, 255, 0.72);
+          color: var(--ink);
+          border-radius: 999px;
+          padding: clamp(7px, 0.8vw, 10px) clamp(12px, 1.1vw, 16px);
+          font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+          font-size: clamp(12px, 0.92vw, 14px);
+          font-weight: 700;
+          cursor: pointer;
+          transition: transform 0.18s ease, background 0.18s ease;
+          white-space: nowrap;
+        }
+        .enter-catalog-btn:hover {
+          transform: translateY(-1px);
+          background: rgba(255, 255, 255, 0.88);
+        }
+
+        .shatter-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 90;
+          pointer-events: none;
+          overflow: hidden;
+        }
+        .shatter-fragment {
+          position: absolute;
+          background-repeat: no-repeat;
+          will-change: transform, opacity;
+        }
+
         /* WhatsApp CTA */
         .navbar .cta-icon {
           display: inline-flex;
@@ -459,6 +499,8 @@ export default function Home() {
           .stage { aspect-ratio: 4 / 5; }
           .navbar { height: 14%; padding: 0 14px; }
           .navbar nav { display: none; }
+          .cta-actions { gap: 4px; }
+          .enter-catalog-btn { padding: 7px 10px; font-size: 11px; }
           .navbar .cta-icon { gap: 6px; }
           .navbar .cta-icon-badge { width: 36px; height: 36px; }
           .navbar .cta-text { font-size: 12px; }

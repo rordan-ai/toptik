@@ -38,4 +38,11 @@ npm run dev      # שרת פיתוח
 npm run build    # בניה לפרודקשן
 npm run start    # הרצת build
 npm run lint     # בדיקת קוד
+npm run verify   # lint + build (שער איכות)
+npm run backup:bundle  # יצירת git bundle מלא
 ```
+
+## גיבוי ושחזור
+
+- מסמך סטנדרט: `docs/backup-and-recovery.md`
+- לפני שינוי גדול/דיפלוי: להריץ `npm run verify`, לבצע commit+push, וליצור tag גיבוי.

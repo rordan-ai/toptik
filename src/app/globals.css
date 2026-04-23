@@ -208,6 +208,22 @@ body {
     align-items: center;
     gap: 10px;
   }
+  .m-catalog-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    border-radius: 999px;
+    border: 1px solid rgba(31, 39, 49, 0.22);
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0 12px;
+    font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
   .m-wa-icon {
     display: inline-flex;
     align-items: center;
@@ -243,6 +259,7 @@ body {
   }
 
   @media (max-width: 360px) {
+    .m-catalog-btn { padding: 0 10px; font-size: 11px; min-height: 36px; }
     .m-wa-label { font-size: 11px; }
     .m-topbar-actions { gap: 8px; }
     .m-wa-icon { gap: 4px; min-height: 40px; }
@@ -359,4 +376,292 @@ body {
 
   /* Bottom bar in landscape — keep portrait 3-tier sizing per Figma.
      If landscape needs custom sizing, design a 4th Figma frame and add overrides here. */
+}
+
+/* ─────── Carousel page ─────── */
+.carousel-page {
+  min-height: 100dvh;
+  background: #f8f1e6;
+  color: var(--ink);
+  padding: clamp(16px, 2vw, 28px);
+}
+
+.carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.carousel-header h1 {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(24px, 2vw, 34px);
+  font-weight: 600;
+}
+
+.carousel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.carousel-back-link,
+.carousel-admin-link {
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid rgba(31, 39, 49, 0.2);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.catalog-carousel {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 18px);
+  padding: 12px;
+}
+
+.catalog-card {
+  border: 1px solid rgba(31, 39, 49, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  color: var(--ink);
+  text-align: right;
+  cursor: pointer;
+}
+
+.catalog-card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.catalog-card-image {
+  object-fit: cover;
+}
+
+.catalog-card-body {
+  padding: 10px 12px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.catalog-card-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.catalog-card-cta {
+  font-size: 13px;
+  font-weight: 700;
+  color: #8a6a2d;
+}
+
+.carousel-loading {
+  max-width: 1320px;
+  margin: 40px auto;
+  text-align: center;
+  font-size: 16px;
+}
+
+.product-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(20, 24, 28, 0.68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.product-modal {
+  width: min(960px, 96vw);
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  position: relative;
+}
+
+.product-modal-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(31, 39, 49, 0.22);
+  background: #fff;
+  cursor: pointer;
+}
+
+.product-modal-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.product-modal-image {
+  object-fit: cover;
+}
+
+.product-modal-footer {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-modal-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 39, 49, 0.2);
+  background: #fff;
+  cursor: pointer;
+}
+
+.product-modal-meta {
+  text-align: center;
+}
+
+.product-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.product-modal-angle {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ─────── Admin page ─────── */
+.admin-page {
+  min-height: 100dvh;
+  background: #f8f1e6;
+  color: var(--ink);
+  padding: 18px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admin-back-link {
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid rgba(31, 39, 49, 0.2);
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+.admin-auth,
+.admin-settings,
+.admin-items,
+.admin-save {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(31, 39, 49, 0.12);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.admin-auth input,
+.admin-settings input,
+.admin-item-grid input,
+.admin-angle-row input {
+  width: 100%;
+  border: 1px solid rgba(31, 39, 49, 0.2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 4px;
+}
+
+.admin-auth button,
+.admin-items-head button,
+.admin-angles-head button,
+.admin-save button {
+  border: 1px solid rgba(31, 39, 49, 0.2);
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.admin-status {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.admin-items-head,
+.admin-angles-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.admin-item-card {
+  border: 1px solid rgba(31, 39, 49, 0.12);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #fdfaf4;
+}
+
+.admin-item-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-angle-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.checkbox-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+@media (max-width: 767px) {
+  .catalog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .carousel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-item-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-angle-row {
+    grid-template-columns: 1fr;
+  }
 }

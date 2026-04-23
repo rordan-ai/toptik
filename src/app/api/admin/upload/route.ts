@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createSupabaseServiceRoleClient } from "@/lib/supabase/server";
+import { supabaseEnv } from "@/lib/supabase/env";
+
+const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const MAX_UPLOAD_SIZE = 8 * 1024 * 1024;
+
+function isAuthorized(req: NextRequest) {
+  const token = req.headers.get("x-admin-token");
+  return Boolean(token && supabaseEnv.adminToken && token === supabaseEnv.adminToken);
+}
+
+export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const formData = await req.formData();
+    const file = formData.get("file");
+    const folder = String(formData.get("folder") || "misc");
+
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: "File is required" }, { status: 400 });
+    }
+    if (!ACCEPTED_IMAGE_TYPES.has(file.type)) {
+      return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
+    }
+    if (file.size > MAX_UPLOAD_SIZE) {
+      return NextResponse.json({ error: "File exceeds 8MB limit" }, { status: 400 });
+    }
+
+    const ext = file.name.split(".").pop() || "png";
+    const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, "");
+    const filePath = `${safeFolder}/${crypto.randomUUID()}.${ext}`;
+
+    const supabase = createSupabaseServiceRoleClient();
+    const bytes = await file.arrayBuffer();
+
+    const { error } = await supabase.storage
+      .from("carousel-media")
+      .upload(filePath, bytes, { contentType: file.type, upsert: false });
+
+    if (error) {
+      throw error;
+    }
+
+    const { data } = supabase.storage.from("carousel-media").getPublicUrl(filePath);
+
+    return NextResponse.json({
+      path: filePath,
+      publicUrl: data.publicUrl,
+    });
+  } catch (error) {
+    console.error("POST /api/admin/upload failed", error);
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+  }
+}

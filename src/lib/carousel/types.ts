@@ -1,0 +1,44 @@
+export type TransitionMode = "shatter-particle" | "curtain-fade";
+
+export interface CarouselAngle {
+  id: string;
+  itemId: string;
+  angleKey: string;
+  imagePath: string;
+  angleOrder: number;
+}
+
+export interface CarouselItem {
+  id: string;
+  title: string;
+  description: string | null;
+  coverImagePath: string;
+  displayOrder: number;
+  isActive: boolean;
+  angles: CarouselAngle[];
+}
+
+export interface CarouselSettings {
+  autoplayMs: number;
+  transitionMode: TransitionMode;
+}
+
+export interface CarouselPayload {
+  items: CarouselItem[];
+  settings: CarouselSettings;
+}
+
+export interface AdminItemInput {
+  id?: string;
+  title: string;
+  description?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  coverImagePath: string;
+  angles: Array<{
+    id?: string;
+    angleKey: string;
+    angleOrder: number;
+    imagePath: string;
+  }>;
+}
