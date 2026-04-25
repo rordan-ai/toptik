@@ -46,3 +46,15 @@ npm run backup:bundle  # יצירת git bundle מלא
 
 - מסמך סטנדרט: `docs/backup-and-recovery.md`
 - לפני שינוי גדול/דיפלוי: להריץ `npm run verify`, לבצע commit+push, וליצור tag גיבוי.
+
+## Rollback מהיר לקרוסלה
+
+- משתנה בקרה: `NEXT_PUBLIC_ENABLE_CAROUSEL`
+- `true` (ברירת מחדל): Home מציג CTA לקטלוג ו-`/carousel` פעיל.
+- `false`: CTA מוסתר, כפתור קטלוג במובייל מוסתר, ו-`/carousel` מפנה אוטומטית ל-`/`.
+
+## ייבוא מוצר לפי מק"ט (Mandarina Duck)
+
+- באדמין ניתן להזין מספר קטלוגי וללחוץ ייבוא אוטומטי.
+- הייבוא מושך תמונות מהמקור, מעלה עותק ל-`carousel-media` ב-Supabase, ויוצר מוצר חדש בטיוטה.
+- לאחר ייבוא יש ללחוץ `שמור הכל` כדי לקבע את המוצר ב-DB.

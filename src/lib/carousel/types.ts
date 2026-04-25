@@ -12,6 +12,8 @@ export interface CarouselItem {
   id: string;
   title: string;
   description: string | null;
+  catalogNumber?: string | null;
+  sourceUrl?: string | null;
   coverImagePath: string;
   displayOrder: number;
   isActive: boolean;
@@ -32,6 +34,8 @@ export interface AdminItemInput {
   id?: string;
   title: string;
   description?: string | null;
+  catalogNumber?: string | null;
+  sourceUrl?: string | null;
   displayOrder: number;
   isActive: boolean;
   coverImagePath: string;

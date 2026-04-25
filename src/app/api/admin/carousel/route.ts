@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const payload = await getCarouselPayload();
+    const payload = await getCarouselPayload({ includeInactive: true });
     return NextResponse.json(payload);
   } catch (error) {
     console.error("GET /api/admin/carousel failed", error);
@@ -32,6 +32,8 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("PUT /api/admin/carousel failed", error);
-    return NextResponse.json({ error: "Failed to save carousel data" }, { status: 400 });
+    const message = error instanceof Error ? error.message : "Failed to save carousel data";
+    const status = message.includes("Missing Supabase admin env vars") ? 500 : 400;
+    return NextResponse.json({ error: message }, { status });
   }
 }

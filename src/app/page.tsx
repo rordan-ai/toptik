@@ -1,6 +1,8 @@
-﻿import Image from "next/image";
+import Image from "next/image";
+import homePageImage from "../../images/Home_page.png";
 import MobileLayer from "./MobileLayer";
 import { HomeToCarouselCta } from "@/components/carousel/HomeToCarouselCta";
+import { isCarouselEnabled } from "@/lib/carousel/feature-flag";
 
 const navItems = [
   { href: "#deals", label: "מבצעים" },
@@ -40,12 +42,14 @@ const bbCategories = [
 ];
 
 export default function Home() {
+  const carouselEnabled = isCarouselEnabled();
+
   return (
     <div className="page">
       <div className="stage" data-variant="v1">
         {/* Hero — desktop landscape (1366x666) */}
         <Image
-          src="/hero-web-airport.png"
+          src={homePageImage}
           alt="TopTik Hero"
           fill
           priority
@@ -88,7 +92,7 @@ export default function Home() {
           </nav>
 
           <div className="cta-actions">
-            <HomeToCarouselCta heroImageUrl="/hero-web-airport.png" />
+            {carouselEnabled && <HomeToCarouselCta heroImageUrl="/hero-web-airport.png" />}
             <a
               className="cta-icon"
               href="https://wa.me/"
@@ -150,7 +154,7 @@ export default function Home() {
         </div>
 
         {/* ═══ MOBILE LAYER (<768px only - hidden on desktop via CSS) ═══ */}
-        <MobileLayer />
+        <MobileLayer isCarouselEnabled={carouselEnabled} />
       </div>
 
       <style>{`
@@ -334,6 +338,10 @@ export default function Home() {
         .enter-catalog-btn:hover {
           transform: translateY(-1px);
           background: rgba(255, 255, 255, 0.88);
+        }
+        .enter-catalog-btn:disabled {
+          opacity: 0.72;
+          cursor: wait;
         }
 
         .shatter-overlay {

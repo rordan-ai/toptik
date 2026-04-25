@@ -14,6 +14,8 @@ type ItemRow = {
   id: string;
   title: string;
   description: string | null;
+  catalog_number?: string | null;
+  source_url?: string | null;
   cover_image_path: string;
   display_order: number;
   is_active: boolean;
@@ -27,20 +29,45 @@ type AngleRow = {
   angle_order: number;
 };
 
-export async function getCarouselPayload(): Promise<CarouselPayload> {
+type GetCarouselPayloadOptions = {
+  includeInactive?: boolean;
+};
+
+export async function getCarouselPayload(
+  options: GetCarouselPayloadOptions = {},
+): Promise<CarouselPayload> {
   if (!hasSupabasePublicEnv()) {
     return fallbackCarouselPayload;
   }
 
   const supabase = createSupabaseServerClient();
+  const includeInactive = Boolean(options.includeInactive);
+  let itemQuery = supabase
+    .from("carousel_items")
+    .select("*")
+    .order("display_order", { ascending: true });
+
+  if (!includeInactive) {
+    itemQuery = itemQuery.eq("is_active", true);
+  }
 
   const [{ data: settingsRow }, { data: itemRows, error: itemsError }] = await Promise.all([
     supabase.from("carousel_settings").select("*").eq("id", 1).maybeSingle<SettingsRow>(),
-    supabase.from("carousel_items").select("*").eq("is_active", true).order("display_order", { ascending: true }),
+    itemQuery,
   ]);
 
   if (itemsError || !itemRows) {
     return fallbackCarouselPayload;
+  }
+
+  if (itemRows.length === 0) {
+    return {
+      ...fallbackCarouselPayload,
+      settings: {
+        autoplayMs: settingsRow?.autoplay_ms ?? fallbackCarouselPayload.settings.autoplayMs,
+        transitionMode: settingsRow?.transition_mode ?? fallbackCarouselPayload.settings.transitionMode,
+      },
+    };
   }
 
   const itemIds = itemRows.map((row: ItemRow) => row.id);
@@ -62,6 +89,8 @@ export async function getCarouselPayload(): Promise<CarouselPayload> {
       id: item.id,
       title: item.title,
       description: item.description,
+      catalogNumber: item.catalog_number ?? null,
+      sourceUrl: item.source_url ?? null,
       coverImagePath: item.cover_image_path,
       displayOrder: item.display_order,
       isActive: item.is_active,
@@ -107,18 +136,56 @@ export async function saveCarouselPayload(input: unknown) {
     id: item.id,
     title: item.title,
     description: item.description ?? null,
+    catalog_number: item.catalogNumber ?? null,
+    source_url: item.sourceUrl ?? null,
     cover_image_path: item.coverImagePath,
     display_order: item.displayOrder,
     is_active: item.isActive,
   }));
 
-  const { error: itemsError, data: upsertedItems } = await supabase
+  let { error: itemsError, data: upsertedItems } = await supabase
     .from("carousel_items")
     .upsert(itemRows, { onConflict: "id" })
     .select("id");
+
+  if (
+    itemsError &&
+    (itemsError.message.includes("catalog_number") || itemsError.message.includes("source_url"))
+  ) {
+    const legacyRows = normalizedItems.map((item) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description ?? null,
+      cover_image_path: item.coverImagePath,
+      display_order: item.displayOrder,
+      is_active: item.isActive,
+    }));
+
+    const legacyResult = await supabase
+      .from("carousel_items")
+      .upsert(legacyRows, { onConflict: "id" })
+      .select("id");
+    itemsError = legacyResult.error;
+    upsertedItems = legacyResult.data;
+  }
+
   if (itemsError) throw itemsError;
 
   const validItemIds = new Set((upsertedItems ?? []).map((row: { id: string }) => row.id));
+
+  const { data: existingItems } = await supabase.from("carousel_items").select("id");
+  const incomingItemIds = new Set(normalizedItems.map((item) => item.id));
+  const itemIdsToDelete = (existingItems ?? [])
+    .filter((row: { id: string }) => !incomingItemIds.has(row.id))
+    .map((row: { id: string }) => row.id);
+
+  if (itemIdsToDelete.length > 0) {
+    const { error: deleteItemsError } = await supabase
+      .from("carousel_items")
+      .delete()
+      .in("id", itemIdsToDelete);
+    if (deleteItemsError) throw deleteItemsError;
+  }
 
   const angleRows = normalizedItems.flatMap((item) =>
     item.angles.map((angle) => ({

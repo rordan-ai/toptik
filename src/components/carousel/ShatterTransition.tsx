@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
+import { TransitionMode } from "@/lib/carousel/types";
 
 type ShatterTransitionProps = {
   imageUrl: string;
+  mode?: TransitionMode;
   onComplete: () => void;
 };
 
@@ -26,7 +28,20 @@ function buildFragments(rows: number, cols: number): Fragment[] {
   return fragments;
 }
 
-export function ShatterTransition({ imageUrl, onComplete }: ShatterTransitionProps) {
+export function ShatterTransition({
+  imageUrl,
+  mode = "shatter-particle",
+  onComplete,
+}: ShatterTransitionProps) {
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const runtimeMode = useMemo(() => {
+    if (typeof window === "undefined") return mode;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const weakDevice = window.innerWidth < 520 || (navigator.hardwareConcurrency ?? 8) <= 4;
+    if (prefersReducedMotion || weakDevice) return "curtain-fade";
+    return mode;
+  }, [mode]);
+
   const { rows, cols } = useMemo(() => {
     if (typeof window === "undefined") return { rows: 4, cols: 6 };
     const isMobile = window.innerWidth < 768;
@@ -36,7 +51,24 @@ export function ShatterTransition({ imageUrl, onComplete }: ShatterTransitionPro
   const fragments = useMemo(() => buildFragments(rows, cols), [rows, cols]);
 
   useEffect(() => {
-    const tiles = gsap.utils.toArray<HTMLElement>(".shatter-fragment");
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    if (runtimeMode === "curtain-fade") {
+      gsap.fromTo(
+        overlay,
+        { opacity: 1 },
+        {
+          duration: 0.34,
+          opacity: 0,
+          ease: "power1.out",
+          onComplete,
+        },
+      );
+      return;
+    }
+
+    const tiles = gsap.utils.toArray<HTMLElement>(".shatter-fragment", overlay);
     gsap.set(tiles, { opacity: 1, scale: 1, rotate: 0, x: 0, y: 0 });
 
     gsap.to(tiles, {
@@ -50,25 +82,40 @@ export function ShatterTransition({ imageUrl, onComplete }: ShatterTransitionPro
       stagger: { each: 0.012, from: "center" },
       onComplete,
     });
-  }, [onComplete]);
+  }, [onComplete, runtimeMode]);
 
   return (
-    <div className="shatter-overlay" aria-hidden>
-      {fragments.map((fragment) => (
-        <div
-          key={fragment.id}
-          className="shatter-fragment"
-          style={{
-            left: `${(fragment.col * 100) / fragment.cols}%`,
-            top: `${(fragment.row * 100) / fragment.rows}%`,
-            width: `${100 / fragment.cols}%`,
-            height: `${100 / fragment.rows}%`,
-            backgroundImage: `url(${imageUrl})`,
-            backgroundSize: `${fragment.cols * 100}% ${fragment.rows * 100}%`,
-            backgroundPosition: `${(fragment.col * 100) / (fragment.cols - 1 || 1)}% ${(fragment.row * 100) / (fragment.rows - 1 || 1)}%`,
-          }}
-        />
-      ))}
+    <div
+      ref={overlayRef}
+      className="shatter-overlay"
+      style={
+        runtimeMode === "curtain-fade"
+          ? {
+              backgroundImage: `url(${imageUrl})`,
+              backgroundPosition: "center center",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }
+          : undefined
+      }
+      aria-hidden
+    >
+      {runtimeMode === "shatter-particle" &&
+        fragments.map((fragment) => (
+          <div
+            key={fragment.id}
+            className="shatter-fragment"
+            style={{
+              left: `${(fragment.col * 100) / fragment.cols}%`,
+              top: `${(fragment.row * 100) / fragment.rows}%`,
+              width: `${100 / fragment.cols}%`,
+              height: `${100 / fragment.rows}%`,
+              backgroundImage: `url(${imageUrl})`,
+              backgroundSize: `${fragment.cols * 100}% ${fragment.rows * 100}%`,
+              backgroundPosition: `${(fragment.col * 100) / (fragment.cols - 1 || 1)}% ${(fragment.row * 100) / (fragment.rows - 1 || 1)}%`,
+            }}
+          />
+        ))}
     </div>
   );
 }

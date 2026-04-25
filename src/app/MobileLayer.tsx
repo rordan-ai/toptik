@@ -39,7 +39,11 @@ const categories = [
 ];
 
 
-export default function MobileLayer() {
+type MobileLayerProps = {
+  isCarouselEnabled?: boolean;
+};
+
+export default function MobileLayer({ isCarouselEnabled = true }: MobileLayerProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -61,9 +65,11 @@ export default function MobileLayer() {
           <div className="m-slogan">Move in Style.</div>
         </div>
         <div className="m-topbar-actions">
-          <Link className="m-catalog-btn" href="/carousel" aria-label="כניסה לקטלוג">
-            קטלוג
-          </Link>
+          {isCarouselEnabled && (
+            <Link className="m-catalog-btn" href="/carousel" aria-label="כניסה לקטלוג">
+              קטלוג
+            </Link>
+          )}
           <a
             className="m-wa-icon"
             href="https://wa.me/"
