@@ -7,12 +7,21 @@ import { CarouselPayload, TransitionMode } from "@/lib/carousel/types";
 import { fallbackCarouselPayload } from "@/lib/carousel/fallback-data";
 
 const STORAGE_KEY = "toptik_admin_token";
+const BATCH_IMPORT_SIZE = 25;
 type ImportFeedbackTone = "info" | "success" | "error";
 type ImportPreview = {
   id: string;
   title: string;
   coverImagePath: string;
   catalogNumber: string;
+};
+type ImportedItemData = {
+  item: CarouselPayload["items"][number];
+  source: { catalogNumber: string; importedImages: number };
+};
+type BatchImportStatus = {
+  tone: ImportFeedbackTone;
+  message: string;
 };
 
 export default function AdminPage() {
@@ -23,6 +32,11 @@ export default function AdminPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [catalogNumber, setCatalogNumber] = useState("");
   const [isImporting, setIsImporting] = useState(false);
+  const [batchCatalogInputs, setBatchCatalogInputs] = useState<string[]>(
+    Array.from({ length: BATCH_IMPORT_SIZE }, () => ""),
+  );
+  const [batchImportStatuses, setBatchImportStatuses] = useState<Record<number, BatchImportStatus>>({});
+  const [isBatchImporting, setIsBatchImporting] = useState(false);
   const [itemCatalogInputs, setItemCatalogInputs] = useState<Record<string, string>>({});
   const [itemImportingMap, setItemImportingMap] = useState<Record<string, boolean>>({});
   const [importFeedback, setImportFeedback] = useState<{
@@ -34,6 +48,88 @@ export default function AdminPage() {
   function resolveErrorMessage(error: unknown, fallback: string) {
     if (error instanceof Error && error.message) return error.message;
     return fallback;
+  }
+
+  function normalizeCatalogNumber(value: string) {
+    return value.trim().toUpperCase();
+  }
+
+  function upsertImportedItem(
+    current: CarouselPayload,
+    data: ImportedItemData,
+    targetItemId?: string,
+  ) {
+    const next = structuredClone(current);
+    const normalizedCatalog = normalizeCatalogNumber(data.source.catalogNumber);
+    const existingIndex = targetItemId
+      ? next.items.findIndex((item) => item.id === targetItemId)
+      : next.items.findIndex((item) => {
+          const byCatalogNumber =
+            normalizeCatalogNumber(item.catalogNumber ?? "") === normalizedCatalog;
+          const byCatalogPath = item.angles.some((angle) =>
+            angle.imagePath.includes(`/imports/mandarina/${data.source.catalogNumber}/`),
+          );
+          const byTitle = item.title.trim().toLowerCase() === data.item.title.trim().toLowerCase();
+          return byCatalogNumber || byCatalogPath || byTitle;
+        });
+
+    if (existingIndex >= 0) {
+      const existing = next.items[existingIndex];
+      next.items[existingIndex] = {
+        ...existing,
+        title: data.item.title,
+        description: data.item.description,
+        catalogNumber: data.item.catalogNumber ?? data.source.catalogNumber,
+        sourceUrl: data.item.sourceUrl ?? null,
+        coverImagePath: data.item.coverImagePath,
+        angles: data.item.angles.map((angle) => ({
+          ...angle,
+          itemId: existing.id,
+        })),
+      };
+      return { next, mode: "updated" as const };
+    }
+
+    const maxOrder = next.items.reduce((max, item) => Math.max(max, item.displayOrder), 0);
+    next.items.push({
+      ...data.item,
+      displayOrder: maxOrder + 1,
+    });
+    return { next, mode: "created" as const };
+  }
+
+  async function importCatalogNumberFromSource(
+    activeCatalogNumber: string,
+    targetItemId?: string,
+  ): Promise<ImportedItemData> {
+    const res = await fetch("/api/admin/import/mandarina", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-token": token,
+      },
+      body: JSON.stringify({ catalogNumber: activeCatalogNumber, targetItemId }),
+    });
+    if (!res.ok) {
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      throw new Error(data?.error || "Import failed");
+    }
+    return (await res.json()) as ImportedItemData;
+  }
+
+  async function persistPayload(nextPayload: CarouselPayload) {
+    const res = await fetch("/api/admin/carousel", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-token": token,
+      },
+      body: JSON.stringify(nextPayload),
+    });
+    if (!res.ok) {
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      throw new Error(data?.error || "Save failed");
+    }
   }
 
   const loadData = useCallback(async (activeToken: string) => {
@@ -158,18 +254,7 @@ export default function AdminPage() {
     try {
       setIsSaving(true);
       setStatus("שומר...");
-      const res = await fetch("/api/admin/carousel", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-token": token,
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(data?.error || "Save failed");
-      }
+      await persistPayload(payload);
       setStatus("נשמר בהצלחה");
       setImportFeedback({
         tone: "success",
@@ -203,60 +288,10 @@ export default function AdminPage() {
         tone: "info",
         message: "מתבצע ייבוא, נא להמתין...",
       });
-      const res = await fetch("/api/admin/import/mandarina", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-token": token,
-        },
-        body: JSON.stringify({ catalogNumber }),
-      });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(data?.error || "Import failed");
-      }
-
-      const data = (await res.json()) as {
-        item: CarouselPayload["items"][number];
-        source: { catalogNumber: string; importedImages: number };
-      };
+      const data = await importCatalogNumberFromSource(catalogNumber);
 
       setPayload((current) => {
-        const next = structuredClone(current);
-        const existingIndex = next.items.findIndex((item) => {
-          const byCatalogNumber =
-            (item.catalogNumber ?? "").trim().toLowerCase() ===
-            (data.source.catalogNumber ?? "").trim().toLowerCase();
-          const byCatalogPath = item.angles.some((angle) =>
-            angle.imagePath.includes(`/imports/mandarina/${data.source.catalogNumber}/`),
-          );
-          const byTitle = item.title.trim().toLowerCase() === data.item.title.trim().toLowerCase();
-          return byCatalogNumber || byCatalogPath || byTitle;
-        });
-
-        if (existingIndex >= 0) {
-          const existing = next.items[existingIndex];
-          next.items[existingIndex] = {
-            ...existing,
-            title: data.item.title,
-            description: data.item.description,
-            catalogNumber: data.item.catalogNumber ?? data.source.catalogNumber,
-            sourceUrl: data.item.sourceUrl ?? null,
-            coverImagePath: data.item.coverImagePath,
-            angles: data.item.angles.map((angle) => ({
-              ...angle,
-              itemId: existing.id,
-            })),
-          };
-          return next;
-        }
-
-        const maxOrder = next.items.reduce((max, item) => Math.max(max, item.displayOrder), 0);
-        next.items.push({
-          ...data.item,
-          displayOrder: maxOrder + 1,
-        });
-        return next;
+        return upsertImportedItem(current, data).next;
       });
 
       setStatus(
@@ -288,7 +323,7 @@ export default function AdminPage() {
     }
   }
 
-  async function onImportIntoExistingItem(itemIndex: number, itemId: string) {
+  async function onImportIntoExistingItem(itemId: string) {
     const itemCatalogNumber = (itemCatalogInputs[itemId] || "").trim();
     if (!itemCatalogNumber) {
       setStatus("יש להזין מספר קטלוגי ליבוא למוצר");
@@ -307,41 +342,10 @@ export default function AdminPage() {
         message: `מתבצע ייבוא למוצר קיים (${itemCatalogNumber})...`,
       });
 
-      const res = await fetch("/api/admin/import/mandarina", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-admin-token": token,
-        },
-        body: JSON.stringify({ catalogNumber: itemCatalogNumber, targetItemId: itemId }),
-      });
-
-      if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(data?.error || "Import to existing item failed");
-      }
-
-      const data = (await res.json()) as {
-        item: CarouselPayload["items"][number];
-        source: { catalogNumber: string; importedImages: number };
-      };
+      const data = await importCatalogNumberFromSource(itemCatalogNumber, itemId);
 
       setPayload((current) => {
-        const next = structuredClone(current);
-        const existing = next.items[itemIndex];
-        next.items[itemIndex] = {
-          ...existing,
-          title: data.item.title,
-          description: data.item.description,
-          catalogNumber: data.item.catalogNumber ?? data.source.catalogNumber,
-          sourceUrl: data.item.sourceUrl ?? null,
-          coverImagePath: data.item.coverImagePath,
-          angles: data.item.angles.map((angle) => ({
-            ...angle,
-            itemId: existing.id,
-          })),
-        };
-        return next;
+        return upsertImportedItem(current, data, itemId).next;
       });
 
       setItemCatalogInputs((current) => ({ ...current, [itemId]: "" }));
@@ -370,6 +374,111 @@ export default function AdminPage() {
       });
     } finally {
       setItemImportingMap((current) => ({ ...current, [itemId]: false }));
+    }
+  }
+
+  async function onBatchImportAndSave() {
+    const normalizedRows = batchCatalogInputs.map((value, index) => ({
+      index,
+      catalogNumber: normalizeCatalogNumber(value),
+    }));
+    const filledRows = normalizedRows.filter((row) => row.catalogNumber);
+    const nextStatuses: Record<number, BatchImportStatus> = {};
+
+    if (filledRows.length === 0) {
+      setBatchImportStatuses({
+        0: { tone: "error", message: "יש להזין לפחות מק״ט אחד." },
+      });
+      return;
+    }
+
+    const seen = new Map<string, number>();
+    for (const row of filledRows) {
+      const firstIndex = seen.get(row.catalogNumber);
+      if (firstIndex !== undefined) {
+        nextStatuses[row.index] = { tone: "error", message: `מק״ט כפול בשורה ${firstIndex + 1}` };
+        nextStatuses[firstIndex] = { tone: "error", message: `מק״ט כפול בשורה ${row.index + 1}` };
+      } else {
+        seen.set(row.catalogNumber, row.index);
+      }
+    }
+
+    if (Object.keys(nextStatuses).length > 0) {
+      setBatchImportStatuses(nextStatuses);
+      setImportFeedback({
+        tone: "error",
+        message: "יש מק״טים כפולים. תקן לפני שמירה.",
+      });
+      return;
+    }
+
+    try {
+      setIsBatchImporting(true);
+      setBatchImportStatuses(
+        Object.fromEntries(
+          filledRows.map((row) => [row.index, { tone: "info", message: "ממתין ליבוא..." }]),
+        ),
+      );
+      setImportFeedback({
+        tone: "info",
+        message: `מייבא ${filledRows.length} מק״טים ושומר בסיום...`,
+      });
+
+      let workingPayload = structuredClone(payload);
+      const previews: ImportPreview[] = [];
+      let successCount = 0;
+
+      for (const row of filledRows) {
+        setBatchImportStatuses((current) => ({
+          ...current,
+          [row.index]: { tone: "info", message: "מייבא..." },
+        }));
+
+        try {
+          const data = await importCatalogNumberFromSource(row.catalogNumber);
+          const result = upsertImportedItem(workingPayload, data);
+          workingPayload = result.next;
+          successCount += 1;
+          previews.push({
+            id: crypto.randomUUID(),
+            title: data.item.title,
+            coverImagePath: data.item.coverImagePath,
+            catalogNumber: data.source.catalogNumber,
+          });
+          setBatchImportStatuses((current) => ({
+            ...current,
+            [row.index]: {
+              tone: "success",
+              message: result.mode === "updated" ? "עודכן מוצר קיים" : "נוצר מוצר חדש",
+            },
+          }));
+        } catch (error) {
+          const message = resolveErrorMessage(error, "לא נמצא מק״ט או שגיאת יבוא");
+          setBatchImportStatuses((current) => ({
+            ...current,
+            [row.index]: { tone: "error", message },
+          }));
+        }
+      }
+
+      if (successCount === 0) {
+        throw new Error("לא יובא אף מוצר. לא נשמרו שינויים.");
+      }
+
+      await persistPayload(workingPayload);
+      setPayload(workingPayload);
+      setImportPreviews((current) => [...previews, ...current].slice(0, 8));
+      setStatus(`נשמרו ${successCount} מוצרים מייבוא מרובה.`);
+      setImportFeedback({
+        tone: "success",
+        message: `הייבוא המרובה הסתיים ונשמר: ${successCount}/${filledRows.length} מוצרים הצליחו.`,
+      });
+    } catch (error) {
+      const message = resolveErrorMessage(error, "שגיאת ייבוא מרובה");
+      setStatus(message);
+      setImportFeedback({ tone: "error", message });
+    } finally {
+      setIsBatchImporting(false);
     }
   }
 
@@ -410,6 +519,47 @@ export default function AdminPage() {
 
       {authReady && (
         <>
+          <section className="admin-batch-import">
+            <div className="admin-items-head">
+              <h2>ייבוא מרובה לפי מק״טים</h2>
+              <button onClick={onBatchImportAndSave} disabled={isBatchImporting || isSaving || isImporting}>
+                {isBatchImporting ? "מייבא ושומר..." : "ייבא ושמור הכל"}
+              </button>
+            </div>
+            <p className="admin-import-note">
+              הכנס עד 25 מק״טים. המערכת תשלוף ממנדרינה, תיצור/תעדכן מוצרים, ותשמור הכל בפעולה אחת.
+            </p>
+            <div className="admin-batch-grid">
+              {batchCatalogInputs.map((value, index) => {
+                const rowStatus = batchImportStatuses[index];
+                return (
+                  <label key={`batch-catalog-${index}`} className="admin-batch-row">
+                    <span>{index + 1}</span>
+                    <input
+                      value={value}
+                      onChange={(e) => {
+                        const nextValue = e.target.value;
+                        setBatchCatalogInputs((current) =>
+                          current.map((row, rowIndex) => (rowIndex === index ? nextValue : row)),
+                        );
+                        setBatchImportStatuses((current) => {
+                          const next = { ...current };
+                          delete next[index];
+                          return next;
+                        });
+                      }}
+                      placeholder="מק״ט"
+                      dir="ltr"
+                    />
+                    <em className={rowStatus ? `admin-batch-status admin-batch-status-${rowStatus.tone}` : "admin-batch-status"}>
+                      {rowStatus?.message || ""}
+                    </em>
+                  </label>
+                );
+              })}
+            </div>
+          </section>
+
           <section className="admin-settings">
             <h2>הגדרות דפדוף</h2>
             <label>
@@ -460,10 +610,10 @@ export default function AdminPage() {
                 />
               </label>
               <div className="admin-import-actions">
-                <button onClick={onImportByCatalog} disabled={isImporting || isSaving}>
+                <button onClick={onImportByCatalog} disabled={isImporting || isSaving || isBatchImporting}>
                   {isImporting ? "מייבא..." : "ייבא לפי מספר קטלוגי"}
                 </button>
-                <button className="admin-save-inline-btn" onClick={onSave} disabled={isSaving || isImporting}>
+                <button className="admin-save-inline-btn" onClick={onSave} disabled={isSaving || isImporting || isBatchImporting}>
                   {isSaving ? "שומר..." : "שמור הכל"}
                 </button>
               </div>
@@ -608,8 +758,8 @@ export default function AdminPage() {
                       </label>
                       <button
                         type="button"
-                        onClick={() => onImportIntoExistingItem(itemIndex, item.id)}
-                        disabled={Boolean(itemImportingMap[item.id] || isImporting || isSaving)}
+                        onClick={() => onImportIntoExistingItem(item.id)}
+                        disabled={Boolean(itemImportingMap[item.id] || isImporting || isSaving || isBatchImporting)}
                       >
                         {itemImportingMap[item.id] ? "מייבא..." : "ייבא למוצר זה"}
                       </button>
@@ -625,7 +775,7 @@ export default function AdminPage() {
           </section>
 
           <section className="admin-save">
-            <button onClick={onSave} disabled={isSaving}>
+            <button onClick={onSave} disabled={isSaving || isBatchImporting}>
               {isSaving ? "שומר..." : "שמור הכל"}
             </button>
           </section>

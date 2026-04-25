@@ -68,16 +68,7 @@ export default function MobileLayer({ isCarouselEnabled = true }: MobileLayerPro
           <div className="m-slogan">Move in Style.</div>
         </div>
         <div className="m-topbar-actions">
-          {isCarouselEnabled && (
-            <Link
-              className="m-catalog-btn catalog-svg-btn"
-              href="/carousel"
-              aria-label="כניסה לגלריה"
-              style={{ backgroundImage: `url(${catalogButtonUrl})` }}
-            >
-              <span className="catalog-svg-btn-text">כניסה לגלריה</span>
-            </Link>
-          )}
+          <span className="m-wa-label">צ&#39;וטטו עימנו</span>
           <a
             className="m-wa-icon"
             href="https://wa.me/"
@@ -85,7 +76,6 @@ export default function MobileLayer({ isCarouselEnabled = true }: MobileLayerPro
             rel="noopener"
             aria-label="דברו איתנו בוואטסאפ"
           >
-            <span className="m-wa-label">צ&#39;וטטו עימנו</span>
             <span className="m-wa-badge" aria-hidden>
               <Image
                 src="/whatsapp.png"
@@ -106,6 +96,17 @@ export default function MobileLayer({ isCarouselEnabled = true }: MobileLayerPro
           </button>
         </div>
       </header>
+
+      {isCarouselEnabled && (
+        <Link
+          className="m-catalog-btn catalog-svg-btn"
+          href="/carousel"
+          aria-label="כניסה לגלריה"
+          style={{ backgroundImage: `url(${catalogButtonUrl})` }}
+        >
+          <span className="catalog-svg-btn-text">כניסה לגלריה</span>
+        </Link>
+      )}
 
       {/* Slide-down menu */}
       <div className={`m-menu ${open ? "is-open" : ""}`} role="dialog" aria-hidden={!open}>

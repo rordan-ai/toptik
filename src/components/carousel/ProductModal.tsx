@@ -72,10 +72,6 @@ export function ProductModal({
       onClick={onClose}
     >
       <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="product-modal-close" onClick={onClose} aria-label="סגור">
-          ✕
-        </button>
-
         <div className="product-modal-content">
           <div className="product-modal-gallery">
             <div
@@ -135,6 +131,9 @@ export function ProductModal({
             </div>
           </div>
         </div>
+        <button type="button" className="product-modal-close" onClick={onClose} aria-label="סגור">
+          ✕
+        </button>
       </div>
     </div>
   );

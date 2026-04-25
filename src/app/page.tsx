@@ -1,5 +1,5 @@
 import Image from "next/image";
-import homePageImage from "../../images/Home_page.png";
+import homePageImage from "../../images/images_from_mandarina/Home_page.png";
 import MobileLayer from "./MobileLayer";
 import { HomeToCarouselCta } from "@/components/carousel/HomeToCarouselCta";
 import { isCarouselEnabled } from "@/lib/carousel/feature-flag";

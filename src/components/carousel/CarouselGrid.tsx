@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import { A11y, Autoplay, Keyboard, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -44,20 +44,8 @@ function chunkItems(items: CarouselItem[], size: number) {
 }
 
 export function CarouselGrid({ items, autoplayMs, onOpenItem }: CarouselGridProps) {
-  const [itemsPerPage, setItemsPerPage] = useState(4);
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-    const sync = () => setItemsPerPage(media.matches ? 1 : 4);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  const pages = useMemo(() => chunkItems(items, itemsPerPage), [items, itemsPerPage]);
-  const swiperKey = useMemo(
-    () => `${itemsPerPage}:${items.map((item) => item.id).join("|")}`,
-    [items, itemsPerPage],
-  );
+  const pages = useMemo(() => chunkItems(items, 4), [items]);
+  const swiperKey = useMemo(() => items.map((item) => item.id).join("|"), [items]);
 
   return (
     <section className="catalog-carousel" aria-label="קטלוג מוצרים">
@@ -96,7 +84,19 @@ export function CarouselGrid({ items, autoplayMs, onOpenItem }: CarouselGridProp
                     </div>
                   </div>
                   <div className="catalog-card-visual">
-                    <div className="catalog-card-image-wrap">
+                    <div
+                      className="catalog-card-image-wrap"
+                      onMouseEnter={() => preloadAngleImages(item)}
+                      onFocus={() => preloadAngleImages(item)}
+                      onTouchStart={() => preloadAngleImages(item)}
+                      onClick={() => onOpenItem(item)}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`פתח זוויות מוצר ${item.title}`}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") onOpenItem(item);
+                      }}
+                    >
                       <Image
                         src={item.coverImagePath}
                         alt={item.title}
