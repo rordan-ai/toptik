@@ -3,6 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import catalogButton from "../../images/cataloge_bottun.svg";
+
+const catalogButtonUrl = typeof catalogButton === "string" ? catalogButton : catalogButton.src;
 
 const navItems = [
   { href: "#deals", label: "מבצעים" },
@@ -66,8 +69,13 @@ export default function MobileLayer({ isCarouselEnabled = true }: MobileLayerPro
         </div>
         <div className="m-topbar-actions">
           {isCarouselEnabled && (
-            <Link className="m-catalog-btn" href="/carousel" aria-label="כניסה לקטלוג">
-              קטלוג
+            <Link
+              className="m-catalog-btn catalog-svg-btn"
+              href="/carousel"
+              aria-label="כניסה לגלריה"
+              style={{ backgroundImage: `url(${catalogButtonUrl})` }}
+            >
+              <span className="catalog-svg-btn-text">כניסה לגלריה</span>
             </Link>
           )}
           <a

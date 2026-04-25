@@ -323,25 +323,42 @@ export default function Home() {
         }
 
         .enter-catalog-btn {
-          border: 1px solid rgba(31, 39, 49, 0.22);
-          background: rgba(255, 255, 255, 0.72);
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 0;
+          background: transparent;
           color: var(--ink);
-          border-radius: 999px;
-          padding: clamp(7px, 0.8vw, 10px) clamp(12px, 1.1vw, 16px);
+          width: clamp(128px, 9.4vw, 154px);
+          height: clamp(40px, 3vw, 48px);
+          padding: 0;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 116% 470%;
           font-family: var(--font-assistant), var(--font-rubik), sans-serif;
           font-size: clamp(12px, 0.92vw, 14px);
           font-weight: 700;
           cursor: pointer;
-          transition: transform 0.18s ease, background 0.18s ease;
+          transition: transform 0.18s ease, filter 0.18s ease;
           white-space: nowrap;
+          overflow: hidden;
         }
         .enter-catalog-btn:hover {
           transform: translateY(-1px);
-          background: rgba(255, 255, 255, 0.88);
+          filter: brightness(1.03);
         }
         .enter-catalog-btn:disabled {
           opacity: 0.72;
           cursor: wait;
+        }
+        .catalog-svg-btn-text {
+          position: relative;
+          font-family: var(--font-assistant), var(--font-rubik), sans-serif;
+          font-weight: 700;
+          color: var(--ink);
+          line-height: 1;
+          transform: translateY(-1px);
         }
 
         .shatter-overlay {
@@ -508,7 +525,7 @@ export default function Home() {
           .navbar { height: 14%; padding: 0 14px; }
           .navbar nav { display: none; }
           .cta-actions { gap: 4px; }
-          .enter-catalog-btn { padding: 7px 10px; font-size: 11px; }
+          .enter-catalog-btn { width: 112px; height: 36px; font-size: 11px; }
           .navbar .cta-icon { gap: 6px; }
           .navbar .cta-icon-badge { width: 36px; height: 36px; }
           .navbar .cta-text { font-size: 12px; }
